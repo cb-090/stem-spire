@@ -1,0 +1,31 @@
+#root {
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  background-color: #A3D4E9;
+  color: black;
+}
+
+header {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+}
+
+button {
+  background-color: #A3D4E9;
+}
