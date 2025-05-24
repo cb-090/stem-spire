@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useEffect } from "react";
 import "./App.css";
 
 import LogIn from "./LogIn.jsx";
@@ -12,10 +13,11 @@ function App() {
   const [user, setUser] = useState(false);
   const [results, setResults] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
-  const [isHome, setIsHome] = useState(false);
+  const [isHome, setIsHome] = useState(true);
   const [isFavorites, setIsFavorites] = useState(false);
   const [isAbout, setIsAbout] = useState(false);
-  const [isSignUp, setIsSignUp] = useState(true);
+  const [newUser, setNewUser] = useState(true);
+  const [isSignedIn, setIsSignedIn] = useState(false);
 
   const changePage = (page) => {
     setIsLogin(false);
@@ -34,12 +36,40 @@ function App() {
     }
   };
 
+  // some supabase stuff
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user ?? null);
+      }
+    );
+
+    return () => {
+      listener?.subscription.unsubscribe();
+    };
+  }, []);
+
+  // sign out user
+  async function signOut() {
+    const { error } = await supabase.auth.signOut();
+    setIsSignedIn(false);
+    if (error) console.error("Error signing out", error);
+  }
+
   return (
     <>
       <header>
         <h1>STEM-Spire</h1>
         <nav idName="navBar">
-          <button onClick={() => changePage("login")}>Log In</button>
+          {/* checks if signed in, if not, shows log in, if logged in, shows log out */}
+          {!isSignedIn && (
+            <button onClick={() => changePage("login")}>Log In</button>
+          )}
+          {isSignedIn && <button onClick={signOut}>Log Out</button>}
           <button onClick={() => changePage("home")}>Home</button>
           <button onClick={() => changePage("favorites")}>Favorites</button>
           <button onClick={() => changePage("about")}>About</button>
@@ -47,8 +77,11 @@ function App() {
       </header>
       {isLogin && (
         <LogIn
-          isSignUp = {isSignUp}
-          setIsSignUp={setIsSignUp}
+          changePage={changePage}
+          newUser={newUser}
+          setNewUser={setNewUser}
+          isSignedIn={isSignedIn}
+          setIsSignedIn={setIsSignedIn}
         />
       )}
       {isAbout && <About />}
