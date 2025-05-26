@@ -10,8 +10,9 @@
     background-color: #cfeeff;
     text-align: center;
     font-size: 1.5em;
-    border-radius: 8px;
+    border-radius: 10px;
     margin-bottom: 1em;
+    margin-top: .3em;
   }
   
   .scroll-container {
