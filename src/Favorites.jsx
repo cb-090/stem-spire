@@ -12,10 +12,10 @@ export default function Favorites() {
         {placeholderFavorites.map((_, index) => (
           <div className="article-box" key={index}>
             <div className="article-header">
-              <span >Girls Who Code Program Shows Strong Outcomes in Closing Gender Gap In Tech</span> //title 
+              <span >Girls Who Code Program Shows Strong Outcomes in Closing Gender Gap In Tech</span> {/* Title */ }
               <div className="right-group">
-                <span>Girls WHO Code authors</span> //author
-                <span>⭐</span> //bookmark
+                <span>Girls WHO Code authors</span> {/* author */ }
+                <span>⭐</span> {/* bookmark */ }
               </div>
             </div>
             <p className="article-text">
