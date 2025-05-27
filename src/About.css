@@ -1,0 +1,45 @@
+.about-page {
+    padding: 1em;
+    padding-bottom: 2em;
+    text-align: center;
+  }
+  
+  .section-title {
+    background-color: #cfeeff;;
+    display: inline-block;
+    padding: 0.75em 12em;
+    border-radius: 10px;
+    font-size: 1.5em;
+    margin-bottom: 0;
+  
+  }
+  
+  .mission-blurb {
+    margin-bottom: 2em;
+    margin-right: 20vw;
+    margin-left: 20vw;
+    font-size: 1.1em;
+  }
+  
+  .team-grid {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    flex-wrap: wrap;
+  }
+  
+  .team-member {
+    max-width: 200px;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-top: 2em;
+    padding-left: 1em;
+    padding-right: 1em;
+  }
+  
+  .team-member img {
+    width: 100px;
+    height: 130px;
+    border-radius: 50%;
+  }
+  
