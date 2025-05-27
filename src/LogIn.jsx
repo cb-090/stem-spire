@@ -2,46 +2,74 @@ import { supabase } from "./supabase"; // update this path
 
 export default function LogIn({
   changePage,
+  user,
+  setUser,
   newUser,
   setNewUser,
   isSignedIn,
   setIsSignedIn,
+  showWarning,
+  setShowWarning,
 }) {
   async function signUp(e) {
+    console.log("hello?");
     e.preventDefault();
-    setIsSignedIn(true);
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     console.log("Email:", email);
     console.log("Password:", password);
-    if (isSignedIn) {
-      const { error } = await supabase.auth.signUp({ email, password });
-      if (error) console.error("Error signing up", error);
+    const { error } = await supabase.auth.signUp({ email, password });
+    if (error) {
+      console.log("Error signing up", error);
+      document.getElementById("warning").textContent = error.message;
+    } else {
+      setIsSignedIn(true);
     }
   }
-  function logIn(e) {
+  function createAccount(e) {
     e.preventDefault();
-    setNewUser(false);
+    setNewUser(true);
   }
 
   async function signIn(e) {
     e.preventDefault();
-    setIsSignedIn(true);
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    if (error) console.error("Error signing in", error);
-    changePage("home");
+    if (error) {
+      console.log("Error signing in", error);
+      setNewUser(true);
+      setIsSignedIn(false);
+      setShowWarning(true);
+    } else {
+      setUser(data.user);
+      setIsSignedIn(true);
+      changePage("home");
+    }
   }
 
   return (
     <>
-      <h2>Log In</h2>
       <div>
+        {!isSignedIn && !newUser && (
+          <form>
+            <h2>Log In</h2>
+            <label>Email</label>
+            <input id="email" placeholder="Email"></input>
+            <label>Password</label>
+            <input id="password" placeholder="*************"></input>
+            <button onClick={signIn}>Sign In</button>
+            <p>If you don't have an account,</p>
+            <button onClick={createAccount}>Sign Up</button>
+          </form>
+        )}
+        {!isSignedIn && newUser && showWarning && (
+          <p id="warning">Oops! You're a new user, please sign up!</p>
+        )}
         {!isSignedIn && newUser && (
           <form>
             <p>Sign Up!</p>
@@ -50,18 +78,6 @@ export default function LogIn({
             <label>Password</label>
             <input id="password" placeholder="*************"></input>
             <button onClick={signUp}>Sign Up</button>
-            <p>If you already have an account,</p>
-            <button onClick={logIn}>Log In</button>
-          </form>
-        )}
-        {!newUser && (
-          <form>
-            <p>Log In!</p>
-            <label>Email</label>
-            <input id="email" placeholder="Email"></input>
-            <label>Password</label>
-            <input id="password" placeholder="*************"></input>
-            <button onClick={signIn}>Sign In</button>
           </form>
         )}
         {/* this should just be the first time you sign up, otherwise it takes you to the home page */}
