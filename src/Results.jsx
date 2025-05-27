@@ -1,8 +1,13 @@
-export default function Results() {
+export default function Results({articles}) {
     return (
         <>
-        <ul idName="resultsList">
-            <li>Result 1</li>
+        <ul idname="resultsList">
+            {articles.map((article, key) =>
+                <li idname="articleBox" key={key}>
+                    <h4 idname="title">{article.title}</h4>
+                    <p idname="content">{article.content}</p>
+                </li>
+            )}
         </ul>
         </>
     )
