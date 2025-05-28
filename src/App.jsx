@@ -21,9 +21,9 @@ function App() {
   const [isBrowsing, setIsBrowsing] = useState(true);
   const [isFavorites, setIsFavorites] = useState(false);
   const [isAbout, setIsAbout] = useState(false);
-
   const [newUser, setNewUser] = useState(true);
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [showWarning, setShowWarning] = useState(false);
 
   const changePage = (page) => {
     setIsLogin(false);
@@ -44,20 +44,27 @@ function App() {
 
   // some supabase stuff
   useEffect(() => {
+    console.log("are you doing anything")
+    // Check current session
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-    });
-
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setUser(session?.user ?? null);
+      setUser(session?.user ?? null)
+      console.log(user)
+      if (user){
+        setIsSignedIn(true)
+        setNewUser(false)
       }
-    );
-
+    })
+  
+    // Listen for future login/logout
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+    })
+  
     return () => {
-      listener?.subscription.unsubscribe();
-    };
-  }, []);
+      listener.subscription.unsubscribe()
+    }
+  }, [])
+  
 
   // sign out user
   async function signOut() {
@@ -70,7 +77,7 @@ function App() {
     <>
       <header>
         <h1>STEM-Spire</h1>
-        <nav idname="navBar">
+        <nav id="navBar">
           {/* checks if signed in, if not, shows log in, if logged in, shows log out */}
           {!isSignedIn && (
             <button onClick={() => changePage("login")}>Log In</button>
@@ -84,10 +91,14 @@ function App() {
       {isLogin && (
         <LogIn
           changePage={changePage}
+          user = {user}
+          setUser={setUser}
           newUser={newUser}
           setNewUser={setNewUser}
           isSignedIn={isSignedIn}
           setIsSignedIn={setIsSignedIn}
+          showWarning = {showWarning}
+          setShowWarning = {setShowWarning}
         />
       )}
       {isAbout && <About />}
