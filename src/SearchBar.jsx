@@ -12,6 +12,7 @@ export default function SearchBar({ action }) {
 
   return (
     <form onSubmit={submit}>
+      <p>Search for useful STEM-based resources!</p><br />
       <input value={content} onChange={(e) => setContent(e.target.value)} />
       <button>Search</button>
     </form>

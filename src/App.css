@@ -26,6 +26,21 @@ nav {
   gap: 20px;
 }
 
-button {
+header button {
   background-color: #A3D4E9;
+}
+
+.browse-page {
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+}
+
+.page-header {
+  background-color: #cfeeff;
+  text-align: center;
+  font-size: 1.5em;
+  border-radius: 10px;
+  margin-bottom: 1em;
+  margin-top: .3em;
 }

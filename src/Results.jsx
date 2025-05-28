@@ -1,14 +1,24 @@
+import './Results.css'; 
+
 export default function Results({articles}) {
     return (
-        <>
-        <ul idname="resultsList">
+        <div className="scroll-container">
+        <ul className="results-list">
             {articles.map((article, key) =>
-                <li idname="articleBox" key={key}>
-                    <h4 idname="title">{article.title}</h4>
-                    <p idname="content">{article.content}</p>
-                </li>
+            (<li className="article-box" key={key}>
+                <div className="article-header">
+                <span>{article.title}</span> {/* Title */ }
+                <div className="right-group">
+                    <span>{article.author}</span> {/* author */ }
+                    <span>⭐</span> {/* bookmark */ }
+                </div>
+                </div>
+                <p className="article-text">
+                {article.content}
+                </p>
+            </li>)
             )}
         </ul>
-        </>
+        </div>
     )
 }

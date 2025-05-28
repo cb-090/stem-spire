@@ -13,11 +13,12 @@ function App() {
   const [user, setUser] = useState(false);
   const [query, setQuery] = useState(null)
   const [results, setResults] = useState(true);
-  const articles = [{title: "Article 1", content: "this is content for the purposes of testing how articles are displayed"},
-    {title: "Article 1", content:"this website is designed to connect young girls and people interested in STEM with the right resources for them!"}]
+  const articles = [{title: "Article 1", content: "this is content for the purposes of testing how articles are displayed", author: "author here"},
+    {title: "Article 2", content:"this website is designed to connect young girls and people interested in STEM with the right resources for them!", author: "Girls Who Code"},
+  {title: "Article 3", content:"blah blah blah", author: "you! yes, you!"}]
 
   const [isLogin, setIsLogin] = useState(false);
-  const [isHome, setIsHome] = useState(true);
+  const [isBrowsing, setIsBrowsing] = useState(true);
   const [isFavorites, setIsFavorites] = useState(false);
   const [isAbout, setIsAbout] = useState(false);
 
@@ -26,14 +27,14 @@ function App() {
 
   const changePage = (page) => {
     setIsLogin(false);
-    setIsHome(false);
+    setIsBrowsing(false);
     setIsFavorites(false);
     setIsAbout(false);
 
     if (page == "login") {
       setIsLogin(true);
-    } else if (page == "home") {
-      setIsHome(true);
+    } else if (page == "browse") {
+      setIsBrowsing(true);
     } else if (page == "favorites") {
       setIsFavorites(true);
     } else if (page == "about") {
@@ -75,7 +76,7 @@ function App() {
             <button onClick={() => changePage("login")}>Log In</button>
           )}
           {isSignedIn && <button onClick={signOut}>Log Out</button>}
-          <button onClick={() => changePage("home")}>Home</button>
+          <button onClick={() => changePage("browse")}>Browse</button>
           <button onClick={() => changePage("favorites")}>Favorites</button>
           <button onClick={() => changePage("about")}>About</button>
         </nav>
@@ -90,9 +91,11 @@ function App() {
         />
       )}
       {isAbout && <About />}
-      {isHome && (
-        <div>
-          <h2>Browse</h2>
+      {isBrowsing && (
+        <div className="browse-page">
+          <div className="page-header">
+            <h2>Browse</h2>
+          </div>
           <SearchBar action = {setQuery} />
           {results && <Results articles = {articles} />}
         </div>
