@@ -1,0 +1,16 @@
+.login-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1em;
+}
+
+.login-header {
+width: 100%;
+  background-color: #cfeeff;
+  text-align: center;
+  font-size: 1.5em;
+  border-radius: 10px;
+  margin-bottom: 1em;
+  margin-top: .3em;
+}

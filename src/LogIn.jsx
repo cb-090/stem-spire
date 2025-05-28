@@ -1,4 +1,5 @@
 import { supabase } from "./supabase"; // update this path
+import './LogIn.css'; 
 
 export default function LogIn({
   changePage,
@@ -53,14 +54,16 @@ export default function LogIn({
   }
 
   return (
-    <>
+    <div className="login-page">
+    <div className="login-header">
+    </div>
       <div>
         {!isSignedIn && !newUser && (
           <form>
             <h2>Log In</h2>
             <label>Email</label>
             <input id="email" placeholder="Email"></input>
-            <label>Password</label>
+            <label>Password: </label>
             <input id="password" placeholder="*************"></input>
             <button onClick={signIn}>Sign In</button>
             <p>If you don't have an account,</p>
@@ -72,7 +75,7 @@ export default function LogIn({
         )}
         {!isSignedIn && newUser && (
           <form>
-            <p>Sign Up!</p>
+            <p>Sign Up!</p>   
             <label>Email</label>
             <input id="email" placeholder="Email"></input>
             <label>Password</label>
@@ -95,6 +98,6 @@ export default function LogIn({
           </form>
         )}
       </div>
-    </>
+    </div>
   );
 }
