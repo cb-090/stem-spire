@@ -1,5 +1,4 @@
 .favorites-page {
-    height: calc(100vh - 80px);
     display: flex;
     flex-direction: column;
     padding: 1em;

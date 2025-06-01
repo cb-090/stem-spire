@@ -7,15 +7,19 @@ import About from "./About.jsx";
 import SearchBar from "./SearchBar.jsx";
 import Results from "./Results.jsx";
 import Favorites from "./Favorites.jsx";
+import TagFilter from "./TagFilter.jsx";
 import { supabase } from "./supabase";
 
 function App() {
   const [user, setUser] = useState(false);
   const [query, setQuery] = useState(null)
   const [results, setResults] = useState(true);
-  const articles = [{title: "Article 1", content: "this is content for the purposes of testing how articles are displayed", author: "author here"},
-    {title: "Article 2", content:"this website is designed to connect young girls and people interested in STEM with the right resources for them!", author: "Girls Who Code"},
-  {title: "Article 3", content:"blah blah blah", author: "you! yes, you!"}]
+  const availableTags = ["college", "internship", "study tips", "summer program", "career development"];
+  const [selectedTags, setSelectedTags] = useState([]);
+
+  const articles = [{title: "Article 1", content: "this is content for the purposes of testing how articles are displayed", author: "author here", tags: ["college"]},
+    {title: "Article 2", content:"this website is designed to connect young girls and people interested in STEM with the right resources for them!", author: "Girls Who Code", tags: ["summer program", "internship", "career development"]},
+  {title: "Article 3", content:"blah blah blah", author: "you! yes, you!", tags: ["college", "study tips", "internship"] }]
 
   const [isLogin, setIsLogin] = useState(false);
   const [isBrowsing, setIsBrowsing] = useState(true);
@@ -73,6 +77,30 @@ function App() {
     if (error) console.error("Error signing out", error);
   }
 
+  function getFilteredArticles() {
+    let filtered = articles;
+  
+    if (query) {
+      const q = query.toLowerCase();
+      filtered = filtered.filter(article =>
+        article.title.toLowerCase().includes(q) ||
+        article.content.toLowerCase().includes(q)
+      );
+    }
+    if (selectedTags.length > 0) {
+      filtered = filtered
+        .map(article => {
+          const matchCount = article.tags
+            ? selectedTags.filter(tag => article.tags.includes(tag)).length
+            : 0;
+          return { ...article, matchCount };
+        })
+        .filter(article => article.matchCount > 0) 
+        .sort((a, b) => b.matchCount - a.matchCount);
+    }
+    return filtered;
+  }
+   
   return (
     <>
       <header>
@@ -108,7 +136,12 @@ function App() {
             <h2>Browse</h2>
           </div>
           <SearchBar action = {setQuery} />
-          {results && <Results articles = {articles} />}
+          <TagFilter
+            availableTags={availableTags}
+            selectedTags={selectedTags}
+            onChange={setSelectedTags}
+          />
+            {results && <Results articles={getFilteredArticles()} />}
         </div>
       )}
       {isFavorites && <Favorites />}

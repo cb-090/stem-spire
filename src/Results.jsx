@@ -16,7 +16,14 @@ export default function Results({articles}) {
                 <p className="article-text">
                 {article.content}
                 </p>
-            </li>)
+                {article.tags && Array.isArray(article.tags) && (
+                  <div className="article-tags">
+                    {article.tags.map((tag, index) => (
+                      <span className="tag" key={index}>{tag}</span>
+                    ))}
+                  </div>
+                )}
+              </li>)
             )}
         </ul>
         </div>
