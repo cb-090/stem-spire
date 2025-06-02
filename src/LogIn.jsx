@@ -65,7 +65,8 @@ export default function LogIn({
     } else {
       setUser(data.user);
       setIsSignedIn(true);
-      changePage("home");
+      changePage("browse");
+      location.reload()
     }
   }
 
@@ -76,7 +77,7 @@ export default function LogIn({
         {!isSignedIn && !isNewUser && (
           <form>
             <h2>Log In</h2>
-            <label>Email</label>
+            <label>Email: </label>
             <input id="email" placeholder="Email"></input>
             <label>Password: </label>
             <input id="password" placeholder="*************"></input>
@@ -89,11 +90,11 @@ export default function LogIn({
         {!isSignedIn && isNewUser && (
           <form>
             <p>Sign Up!</p>
-            <label>Name</label>
-            <input id="name" placeholder="First Name, Last Name"></input>
-            <label>Email</label>
+            <label>Name: </label>
+            <input id="name" placeholder="First & Last Name"></input>
+            <label>Email: </label>
             <input id="email" placeholder="Email"></input>
-            <label>Password</label>
+            <label>Password: </label>
             <input id="password" placeholder="*************"></input>
             <button onClick={signUp}>Sign Up</button>
           </form>
@@ -109,7 +110,7 @@ export default function LogIn({
               <option value={"Personal use"}>Personal Use</option>
             </select>
             <label>Sign up complete!</label>
-            <button onClick={() => changePage("browse")}>See your suggestions</button>
+            <button onClick={() => location.reload()}>See your suggestions</button>
           </form>
         )}
       </div>
