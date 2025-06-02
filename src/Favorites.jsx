@@ -1,32 +1,30 @@
 import './Favorites.css'; 
 
-export default function Favorites() {
-  const placeholderFavorites = Array.from({ length: 10 });
+export default function Favorites({userName, favorites, unfavorite}) {
+  // const placeholderFavorites = Array.from({ length: 10 });
+  // console.log("userName in Favorites.jsx:", userName.userName);
+
 
   return (
     <div className="favorites-page">
       <div className="favorites-header">
         <h2>Favorites</h2>
+        <p>Hi! {userName}</p>
       </div>
       <div className="scroll-container">
-        {placeholderFavorites.map((_, index) => (
-          <div className="article-box" key={index}>
-            <div className="article-header">
-              <span >Girls Who Code Program Shows Strong Outcomes in Closing Gender Gap In Tech</span> {/* Title */ }
+      {favorites.map((article) => (
+        <li className="article-box" key={article.article_id}>
+          <div className="article-header">
+              <span>{article.articles.title}</span> {/* Title */}
               <div className="right-group">
-                <span>Girls WHO Code authors</span> {/* author */ }
-                <span>⭐</span> {/* bookmark */ }
-              </div>
+                <span>{article.author}</span> 
+                <button onClick={async () => unfavorite(article.article_id)}>⭐</button>
+                  </div>
             </div>
-            <p className="article-text">
-            NEW YORK, NY – Girls Who Code, a nonprofit working to close the gender gap in tech, has released a 
-            groundbreaking report with the American Institutes for Research (AIR) evaluating the effect of the Girls Who 
-            Code’s Summer Programs. The study found that high school students who participate in Summer Programs are more 
-            likely than their peers to major in computer-science related fields in college, and highlights the critical 
-            role of targeted educational initiatives in fostering gender diversity in tech.
-            </p>
-          </div>
-        ))}
+            <p className="article-text">{article.articles.content}</p>
+          </li>))}
+     
+        
       </div>
     </div>
   );

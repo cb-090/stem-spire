@@ -49,4 +49,22 @@
     flex-direction: column;
     gap: 1.5em;
   }
+
+  .article-tags {
+    margin-top: 8px;
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  
+  .tag {
+    background-color: #006064;
+    color: white;
+    padding: 3px 7px;
+    border-radius: 20px;
+    font-size: 0.80em;
+  }
+  
   

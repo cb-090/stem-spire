@@ -1,35 +1,51 @@
 import { supabase } from "./supabase"; // update this path
-import './LogIn.css'; 
+import "./LogIn.css";
 
 export default function LogIn({
   changePage,
   user,
   setUser,
-  newUser,
-  setNewUser,
+  isNewUser,
+  setIsNewUser,
   isSignedIn,
   setIsSignedIn,
-  showWarning,
-  setShowWarning,
+  warning,
+  setWarning,
 }) {
   async function signUp(e) {
-    console.log("hello?");
     e.preventDefault();
+    const name = document.getElementById("name").value;
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     console.log("Email:", email);
     console.log("Password:", password);
-    const { error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({ email, password });
+    // if (!data.user) {
+    //   // User needs to confirm email first
+    //   setWarning("Check your email to confirm your account.");
+    //   return;
+    // }
+
     if (error) {
       console.log("Error signing up", error);
-      document.getElementById("warning").textContent = error.message;
+      setWarning(error.message);
     } else {
-      setIsSignedIn(true);
+      const current_user = data.user;
+      const { nameError } = await supabase
+      .from("user profile")
+      .insert([{ id: current_user.id, name: name }]);
+      console.log("User ID:", user?.id);
+      if (nameError) {
+        console.error("🚨 Insert error:", nameError);
+        setWarning(error.message);
+      } else {
+        setIsSignedIn(true);
+      }
     }
   }
   function createAccount(e) {
     e.preventDefault();
-    setNewUser(true);
+    setIsNewUser(true);
   }
 
   async function signIn(e) {
@@ -43,25 +59,25 @@ export default function LogIn({
 
     if (error) {
       console.log("Error signing in", error);
-      setNewUser(true);
+      setIsNewUser(true);
       setIsSignedIn(false);
-      setShowWarning(true);
+      setWarning("Oops! You're a new user, please sign up!");
     } else {
       setUser(data.user);
       setIsSignedIn(true);
-      changePage("home");
+      changePage("browse");
+      location.reload()
     }
   }
 
   return (
     <div className="login-page">
-    <div className="login-header">
-    </div>
+      <div className="login-header"></div>
       <div>
-        {!isSignedIn && !newUser && (
+        {!isSignedIn && !isNewUser && (
           <form>
             <h2>Log In</h2>
-            <label>Email</label>
+            <label>Email: </label>
             <input id="email" placeholder="Email"></input>
             <label>Password: </label>
             <input id="password" placeholder="*************"></input>
@@ -70,21 +86,21 @@ export default function LogIn({
             <button onClick={createAccount}>Sign Up</button>
           </form>
         )}
-        {!isSignedIn && newUser && showWarning && (
-          <p id="warning">Oops! You're a new user, please sign up!</p>
-        )}
-        {!isSignedIn && newUser && (
+        {!isSignedIn && isNewUser && warning && <p id="warning">{warning}</p>}
+        {!isSignedIn && isNewUser && (
           <form>
-            <p>Sign Up!</p>   
-            <label>Email</label>
+            <p>Sign Up!</p>
+            <label>Name: </label>
+            <input id="name" placeholder="First & Last Name"></input>
+            <label>Email: </label>
             <input id="email" placeholder="Email"></input>
-            <label>Password</label>
+            <label>Password: </label>
             <input id="password" placeholder="*************"></input>
             <button onClick={signUp}>Sign Up</button>
           </form>
         )}
         {/* this should just be the first time you sign up, otherwise it takes you to the home page */}
-        {isSignedIn && newUser && (
+        {isSignedIn && isNewUser && (
           <form>
             <p>What are you looking for?</p>
             <p>What is your occupation?</p>
@@ -93,8 +109,8 @@ export default function LogIn({
               <option value={"Professional"}>Professional</option>
               <option value={"Personal use"}>Personal Use</option>
             </select>
-            <label>See your suggestions</label>
-            <button onClick={() => changePage("home")}>Sign Up</button>
+            <label>Sign up complete!</label>
+            <button onClick={() => location.reload()}>See your suggestions</button>
           </form>
         )}
       </div>

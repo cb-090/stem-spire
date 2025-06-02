@@ -7,23 +7,29 @@ import About from "./About.jsx";
 import SearchBar from "./SearchBar.jsx";
 import Results from "./Results.jsx";
 import Favorites from "./Favorites.jsx";
+import TagFilter from "./TagFilter.jsx";
 import { supabase } from "./supabase";
 
 function App() {
-  const [user, setUser] = useState(false);
-  const [query, setQuery] = useState(null)
-  const [results, setResults] = useState(true);
-  const articles = [{title: "Article 1", content: "this is content for the purposes of testing how articles are displayed", author: "author here"},
-    {title: "Article 2", content:"this website is designed to connect young girls and people interested in STEM with the right resources for them!", author: "Girls Who Code"},
-  {title: "Article 3", content:"blah blah blah", author: "you! yes, you!"}]
+  const [user, setUser] = useState(null);
+  const [userName, setUserName] = useState("");
+  const [query, setQuery] = useState(null);
+  const [articles, setArticles] = useState([]);
+  const [userFavorites, setUserFavorites] = useState([]);
+  const availableTags = ["college", "internship", "study tips", "summer program", "career development"];
+  const [selectedTags, setSelectedTags] = useState([]);
+
+  // const articles = [{title: "Article 1", content: "this is content for the purposes of testing how articles are displayed", author: "author here", tags: ["college"]},
+  //   {title: "Article 2", content:"this website is designed to connect young girls and people interested in STEM with the right resources for them!", author: "Girls Who Code", tags: ["summer program", "internship", "career development"]},
+  // {title: "Article 3", content:"blah blah blah", author: "you! yes, you!", tags: ["college", "study tips", "internship"] }]
 
   const [isLogin, setIsLogin] = useState(false);
   const [isBrowsing, setIsBrowsing] = useState(true);
   const [isFavorites, setIsFavorites] = useState(false);
   const [isAbout, setIsAbout] = useState(false);
-  const [newUser, setNewUser] = useState(true);
+  const [isNewUser, setIsNewUser] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
-  const [showWarning, setShowWarning] = useState(false);
+  const [warning, setWarning] = useState("");
 
   const changePage = (page) => {
     setIsLogin(false);
@@ -44,61 +50,212 @@ function App() {
 
   // some supabase stuff
   useEffect(() => {
-    console.log("are you doing anything")
     // Check current session
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null)
-      console.log(user)
-      if (user){
-        setIsSignedIn(true)
-        setNewUser(false)
+      const currentUser = session?.user ?? null;
+      setUser(currentUser);
+      console.log("Current user:", currentUser, currentUser?.id);
+      if (currentUser) {
+        setIsNewUser(false);
+        getUserName(currentUser);
+        showFavorites();
       }
-    })
-  
+      getArticles()
+    });
+
     // Listen for future login/logout
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
-    })
-  
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUser(session?.user ?? null);
+      }
+    );
+
     return () => {
-      listener.subscription.unsubscribe()
+      listener.subscription.unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    getArticles()
+  }, [selectedTags, query])
+
+   useEffect(() => {
+      // Set up real-time subscription
+      if (user) {
+        getUserName(user)
+
+        const channel = supabase
+          .channel('favorites')
+          .on(
+            'postgres_changes',
+            {
+              event: '*',
+              schema: 'public',
+              table: 'favorites',
+            },
+            async () => {
+              console.log("Favorites updated")
+              await getArticles()
+              await showFavorites()
+            }
+          )
+          .subscribe()
+
+        return () => {
+          channel.unsubscribe()
+        }
+      }
+      else {
+        setUserName(null)
+      }
+    }, [user])
+
+  //getting and setting user name
+  async function getUserName(user) {
+    const { data: profile, error } = await supabase
+      .from("user profile")
+      .select("name")
+      .eq("id", user.id)
+      .single();
+
+    if (error) {
+      console.error("Failed to get user profile:", error.message);
+    } else {
+      setUserName(profile.name);
     }
-  }, [])
-  
+  }
 
   // sign out user
   async function signOut() {
     const { error } = await supabase.auth.signOut();
     setIsSignedIn(false);
+    changePage("browse");
     if (error) console.error("Error signing out", error);
   }
 
+  //favoriting article
+  async function favorite(id) {
+    const { data: userSession } = await supabase.auth.getSession();
+    const user_id = userSession.session.user.id;
+    const article_id = id;
+    console.log("Favorited article", article_id);
+
+    await supabase.from("favorites").upsert([{ user_id, article_id }]);
+    return
+  }
+  
+  //unfavorite
+  async function unfavorite(id) {
+    const { data: userSession } = await supabase.auth.getSession();
+    const user_id = userSession.session.user.id;
+    const article_id = id;
+    console.log("Unfavorited article", article_id);
+
+    await supabase
+  .from("favorites")
+  .delete()
+  .eq("user_id", user_id)
+  .eq("article_id", article_id);
+
+  }
+  
+  //getting user favorites
+
+  async function showFavorites() {
+    const { data: { session } } = await supabase.auth.getSession();
+    const user_id = session?.user?.id;
+  
+    if (!user_id) {
+      console.error("User not signed in");
+      return;
+    }
+  
+    const { data: favoriteArticles, error } = await supabase
+      .from("favorites")
+      .select(`
+        article_id,
+        articles (
+          id,
+          title,
+          content,
+          tags,
+          author
+        )
+      `)
+      .eq("user_id", user_id);
+  
+    if (error) {
+      console.error("Error fetching favorites:", error.message);
+      return;
+    }
+  
+    setUserFavorites(favoriteArticles);
+    console.log("Favorites:", favoriteArticles); 
+  }
+  
+  async function getArticles() {
+      let { data: filtered, error } = await supabase
+      .from("articles")
+      .select(`
+        id,
+        title,
+        content,
+        tags,
+        author
+      `)
+    if (error) {
+      console.error("Error fetching articles:", error.message);
+      return;
+    }
+  
+    if (query) {
+      const q = query.toLowerCase();
+      filtered = filtered.filter(article =>
+        article.title.toLowerCase().includes(q) ||
+        article.content.toLowerCase().includes(q)
+      );
+    }
+    if (selectedTags.length > 0) {
+      filtered = filtered
+        .map(article => {
+          const matchCount = article.tags
+            ? selectedTags.filter(tag => article.tags.includes(tag)).length
+            : 0;
+          return { ...article, matchCount };
+        })
+        .filter(article => article.matchCount > 0) 
+        .sort((a, b) => b.matchCount - a.matchCount);
+    }
+    setArticles(filtered);
+  }
+   
   return (
     <>
       <header>
         <h1>STEM-Spire</h1>
         <nav id="navBar">
           {/* checks if signed in, if not, shows log in, if logged in, shows log out */}
-          {!isSignedIn && (
-            <button onClick={() => changePage("login")}>Log In</button>
-          )}
-          {isSignedIn && <button onClick={signOut}>Log Out</button>}
+
           <button onClick={() => changePage("browse")}>Browse</button>
-          <button onClick={() => changePage("favorites")}>Favorites</button>
+
+          {user && <button onClick={() => changePage("favorites")}>Favorites</button>}
+
           <button onClick={() => changePage("about")}>About</button>
+          {!user && <button onClick={() => changePage("login")}>Log In</button>}
+          {user && <button onClick={signOut}>Log Out</button>}
         </nav>
       </header>
       {isLogin && (
         <LogIn
           changePage={changePage}
-          user = {user}
+          user={user}
           setUser={setUser}
-          newUser={newUser}
-          setNewUser={setNewUser}
+          isNewUser={isNewUser}
+          setIsNewUser={setIsNewUser}
           isSignedIn={isSignedIn}
           setIsSignedIn={setIsSignedIn}
-          showWarning = {showWarning}
-          setShowWarning = {setShowWarning}
+          warning={warning}
+          setWarning={setWarning}
         />
       )}
       {isAbout && <About />}
@@ -106,12 +263,20 @@ function App() {
         <div className="browse-page">
           <div className="page-header">
             <h2>Browse</h2>
+            <p>Hi! {userName}</p>
           </div>
           <SearchBar action = {setQuery} />
-          {results && <Results articles = {articles} />}
+          <TagFilter
+            availableTags={availableTags}
+            selectedTags={selectedTags}
+            onChange={setSelectedTags}
+          />
+          {articles && <Results articles={articles} favorites={userFavorites} user={user} favorite={favorite} unfavorite={unfavorite}/>}
         </div>
       )}
-      {isFavorites && <Favorites />}
+      {isFavorites && (
+        <Favorites userName={userName} favorites={userFavorites} unfavorite={unfavorite} />
+      )}
     </>
   );
 }
