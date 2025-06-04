@@ -9,12 +9,14 @@ import Results from "./Results.jsx";
 import Favorites from "./Favorites.jsx";
 import TagFilter from "./TagFilter.jsx";
 import { supabase } from "./supabase";
+import Recommended from "./Recommended.jsx";
 
 function App() {
   const [user, setUser] = useState(null);
   const [userName, setUserName] = useState("");
   const [query, setQuery] = useState(null);
   const [articles, setArticles] = useState([]);
+  const [recommendations,setRecommendations] = useState([])
   const [userFavorites, setUserFavorites] = useState([]);
   const availableTags = ["college", "internship", "study tips", "summer program", "career development"];
   const [selectedTags, setSelectedTags] = useState([]);
@@ -271,9 +273,11 @@ function App() {
             selectedTags={selectedTags}
             onChange={setSelectedTags}
           />
+          <Recommended userName={userName} articles = {articles}favorites={userFavorites}recommendations={recommendations} setRecommendations={setRecommendations}/>
           {articles && <Results articles={articles} favorites={userFavorites} user={user} favorite={favorite} unfavorite={unfavorite}/>}
         </div>
       )}
+
       {isFavorites && (
         <Favorites userName={userName} favorites={userFavorites} unfavorite={unfavorite} />
       )}
