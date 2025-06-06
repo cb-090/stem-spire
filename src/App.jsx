@@ -232,7 +232,7 @@ function App() {
         .sort((a, b) => b.matchCount - a.matchCount);
     }
     setArticles(filtered);
-  }
+  } 
    
   return (
     <>
@@ -261,6 +261,7 @@ function App() {
           setIsSignedIn={setIsSignedIn}
           warning={warning}
           setWarning={setWarning}
+          setRecommendations={setRecommendations}
         />
       )}
       {isAbout && <About />}
@@ -270,7 +271,7 @@ function App() {
             <h2>Browse</h2>
             <p>Hi! {userName}</p>
           </div>
-          <Recommended user={user}favorites={userFavorites}  favorite={favorite} unfavorite={unfavorite} userName={userName} articles = {articles}recommendations={recommendations} setRecommendations={setRecommendations} click={click}/>
+          <Recommended user={user}favorites={userFavorites}  favorite={favorite} unfavorite={unfavorite} userName={userName} articles = {articles}recommendations={recommendations || []}setRecommendations={setRecommendations} click={click}/>
 
           <SearchBar action = {setQuery} />
           <TagFilter
@@ -279,6 +280,8 @@ function App() {
             onChange={setSelectedTags}
             
           />
+
+
           {articles && <Results articles={articles} favorites={userFavorites} user={user} favorite={favorite} unfavorite={unfavorite} click={click} setClick={setClick}/>}
         </div>
       )}

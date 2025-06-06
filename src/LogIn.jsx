@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { supabase } from "./supabase"; // update this path
 import "./LogIn.css";
 
@@ -11,7 +12,47 @@ export default function LogIn({
   setIsSignedIn,
   warning,
   setWarning,
+  setRecommendations
 }) {
+  const [surveyStep, setSurveyStep] = useState(0);
+  const [surveyData, setSurveyData] = useState({
+    education_level: "",
+    field_of_interest: "",
+    resource_interests: [],
+  });
+  
+  const surveyQuestions = [
+    {
+      id: "education_level",
+      question: "What is your current level of education?",
+      options: ["High School", "University", "Graduate", "Post-graduate"],
+      multi: false,
+    },
+    {
+      id: "field_of_interest",
+      question: "What is your current field of study/major or career interest?",
+      options: [
+        "Engineering", "Computer Science", "Biology", "Chemistry", "Physics",
+        "Medicine", "Environmental Science", "Statistics", "Data Science", "Applied Math"
+      ],
+      multi: false,
+    },
+    {
+      id: "resource_interests",
+      question: "What types of opportunities or resources are you most interested in? (Select all that apply)",
+      options: [
+        "Career exploration/development",
+        "Skill-building workshops",
+        "Academic tips, resources, and study strategies",
+        "Scholarships and financial aid",
+        "Summer programs and internships",
+        "Research opportunities",
+        "Mentorship or networking opportunities"
+        ],
+        multi: true,
+      }
+    ];
+
   async function signUp(e) {
     e.preventDefault();
     const name = document.getElementById("name").value;
@@ -34,18 +75,16 @@ export default function LogIn({
       const { nameError } = await supabase
       .from("user profile")
       .insert([{ id: current_user.id, name: name }]);
-      console.log("User ID:", user?.id);
+      console.log("User ID:", current_user?.id);
       if (nameError) {
         console.error("🚨 Insert error:", nameError);
         setWarning(error.message);
       } else {
-        setIsSignedIn(true);
+        setUser(current_user);
+        setIsSignedIn(true); 
+        setIsNewUser(true); 
       }
     }
-  }
-  function createAccount(e) {
-    e.preventDefault();
-    setIsNewUser(true);
   }
 
   async function signIn(e) {
@@ -69,6 +108,79 @@ export default function LogIn({
       location.reload()
     }
   }
+  
+  function createAccount(e) {
+    e.preventDefault();
+    setIsNewUser(true);
+  }
+
+  function handleSurveyChange(id, value) {
+    setSurveyData((prev) => {
+      if (id === "resource_interests") {
+        const updated = prev.resource_interests.includes(value)
+          ? prev.resource_interests.filter((v) => v !== value)
+          : [...prev.resource_interests, value];
+        return { ...prev, [id]: updated };
+      }
+      return { ...prev, [id]: value };
+    });
+  }
+
+  async function submitSurvey() {
+    console.log("Submitting survey...");
+    const { error } = await supabase
+    .from("user profile")
+    .update(surveyData)
+    .eq("id", user.id);
+
+    if (error) {
+      console.error("Error updating profile:", error);
+    } else {
+    
+    const { data: profile, error: profileError } = await supabase
+      .from("user profile")
+      .select("field_of_interest, resource_interests, education_level")
+      .eq("id", user.id)
+      .single();
+
+    const { data: articlesData, error: articleError } = await supabase
+    .from("articles")
+    .select("id, title, content, tags, author, link");
+  
+    if (articleError) {
+    console.error("Failed to fetch articles for recommendations:", articleError);
+    return;
+    }
+  
+    const interestTags = [
+      ...(surveyData.resource_interests || []),
+      ...(surveyData.field_of_interest ? [surveyData.field_of_interest] : []),
+      ...(surveyData.education_level ? [surveyData.education_level] : [])
+    ].map(tag => tag.toLowerCase());
+  
+    const scoredArticles = articlesData.map(article => {
+    const articleTags = (article.tags || []).map(tag => tag.toLowerCase());
+    const matches = interestTags.filter(tag => articleTags.includes(tag));
+    return { article, score: matches.length };
+  });
+  
+  const surveyRecs = scoredArticles
+    .filter(a => a.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3);
+    console.log("Interest Tags:", interestTags);
+    console.log("Articles from Supabase:", articlesData);
+    console.log("Scored Recommendations:", surveyRecs);
+  
+  // store in App state through props if passed down:
+    console.log("Is setRecommendations a function?", typeof setRecommendations);
+    setRecommendations(surveyRecs);
+    setTimeout(() => {
+        changePage("browse");
+      }, 50);
+    changePage("browse");
+  }
+}
 
   return (
     <div className="login-page">
@@ -102,15 +214,50 @@ export default function LogIn({
         {/* this should just be the first time you sign up, otherwise it takes you to the home page */}
         {isSignedIn && isNewUser && (
           <form>
-            <p>What are you looking for?</p>
-            <p>What is your occupation?</p>
-            <select>
-              <option value={"Student"}>Student</option>
-              <option value={"Professional"}>Professional</option>
-              <option value={"Personal use"}>Personal Use</option>
-            </select>
-            <label>Sign up complete!</label>
-            <button onClick={() => location.reload()}>See your suggestions</button>
+            <p>{surveyQuestions[surveyStep].question}</p>
+            {surveyQuestions[surveyStep].options.map((option, idx) => (
+              <div key={idx}>
+                <label>
+                  <input
+                    type={surveyQuestions[surveyStep].multi ? "checkbox" : "radio"}
+                    name={surveyQuestions[surveyStep].id}
+                    value={option}
+                    checked={
+                      surveyQuestions[surveyStep].multi
+                        ? surveyData[surveyQuestions[surveyStep].id].includes(option)
+                        : surveyData[surveyQuestions[surveyStep].id] === option
+                    }
+                    onChange={() =>
+                      handleSurveyChange(surveyQuestions[surveyStep].id, option)
+                    }
+                  />
+                  {option}
+                </label>
+              </div>
+            ))}
+
+            <div>
+              {surveyStep > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setSurveyStep((prev) => prev - 1)}
+                >
+                  Back
+                </button>
+              )}
+              {surveyStep < surveyQuestions.length - 1 ? (
+                <button
+                  type="button"
+                  onClick={() => setSurveyStep((prev) => prev + 1)}
+                >
+                  Next
+                </button>
+              ) : (
+                <button type="button" onClick={submitSurvey}>
+                  Submit
+                </button>
+              )}
+            </div>
           </form>
         )}
       </div>
