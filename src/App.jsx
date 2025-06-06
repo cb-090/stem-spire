@@ -11,6 +11,7 @@ import TagFilter from "./TagFilter.jsx";
 import { supabase } from "./supabase";
 import Recommended from "./Recommended.jsx";
 
+
 function App() {
   const [user, setUser] = useState(null);
   const [userName, setUserName] = useState("");
@@ -18,7 +19,7 @@ function App() {
   const [articles, setArticles] = useState([]);
   const [recommendations,setRecommendations] = useState([])
   const [userFavorites, setUserFavorites] = useState([]);
-  const availableTags = ["college", "internship", "study tips", "summer program", "career development"];
+  const availableTags = ["Highschool","College", "Internship", "study tips", "summer program", "career development"];
   const [selectedTags, setSelectedTags] = useState([]);
   const [click, setClick] = useState()
 
@@ -270,17 +271,17 @@ function App() {
             <h2>Browse</h2>
             <p>Hi! {userName}</p>
           </div>
+          <Recommended user={user}favorites={userFavorites}  favorite={favorite} unfavorite={unfavorite} userName={userName} articles = {articles}recommendations={recommendations || []}setRecommendations={setRecommendations} click={click}/>
+
           <SearchBar action = {setQuery} />
           <TagFilter
             availableTags={availableTags}
             selectedTags={selectedTags}
             onChange={setSelectedTags}
+            
           />
-          <Recommended userName={userName}
-            articles={articles}
-            recommendations={recommendations || []}
-            setRecommendations={setRecommendations}
-            click={click} />
+
+
           {articles && <Results articles={articles} favorites={userFavorites} user={user} favorite={favorite} unfavorite={unfavorite} click={click} setClick={setClick}/>}
         </div>
       )}
