@@ -231,7 +231,7 @@ function App() {
         .sort((a, b) => b.matchCount - a.matchCount);
     }
     setArticles(filtered);
-  }
+  } 
    
   return (
     <>
@@ -260,6 +260,7 @@ function App() {
           setIsSignedIn={setIsSignedIn}
           warning={warning}
           setWarning={setWarning}
+          setRecommendations={setRecommendations}
         />
       )}
       {isAbout && <About />}
@@ -275,7 +276,11 @@ function App() {
             selectedTags={selectedTags}
             onChange={setSelectedTags}
           />
-          <Recommended userName={userName} articles = {articles}recommendations={recommendations} setRecommendations={setRecommendations} click={click}/>
+          <Recommended userName={userName}
+            articles={articles}
+            recommendations={recommendations || []}
+            setRecommendations={setRecommendations}
+            click={click} />
           {articles && <Results articles={articles} favorites={userFavorites} user={user} favorite={favorite} unfavorite={unfavorite} click={click} setClick={setClick}/>}
         </div>
       )}

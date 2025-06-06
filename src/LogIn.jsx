@@ -12,6 +12,7 @@ export default function LogIn({
   setIsSignedIn,
   warning,
   setWarning,
+  setRecommendations
 }) {
   const [surveyStep, setSurveyStep] = useState(0);
   const [surveyData, setSurveyData] = useState({
@@ -24,7 +25,7 @@ export default function LogIn({
     {
       id: "education_level",
       question: "What is your current level of education?",
-      options: ["High School", "College", "Graduate", "Post-graduate"],
+      options: ["High School", "University", "Graduate", "Post-graduate"],
       multi: false,
     },
     {
@@ -41,7 +42,7 @@ export default function LogIn({
       question: "What types of opportunities or resources are you most interested in? (Select all that apply)",
       options: [
         "Career exploration/development",
-        "Skill-building workshops (e.g., coding, interview tips, etc.)",
+        "Skill-building workshops",
         "Academic tips, resources, and study strategies",
         "Scholarships and financial aid",
         "Summer programs and internships",
@@ -74,12 +75,14 @@ export default function LogIn({
       const { nameError } = await supabase
       .from("user profile")
       .insert([{ id: current_user.id, name: name }]);
-      console.log("User ID:", user?.id);
+      console.log("User ID:", current_user?.id);
       if (nameError) {
         console.error("🚨 Insert error:", nameError);
         setWarning(error.message);
       } else {
-        setIsSignedIn(true);
+        setUser(current_user);
+        setIsSignedIn(true); 
+        setIsNewUser(true); 
       }
     }
   }
@@ -124,19 +127,60 @@ export default function LogIn({
   }
 
   async function submitSurvey() {
+    console.log("Submitting survey...");
     const { error } = await supabase
-      .from("user profile")
-      .update(surveyData)
-      .eq("id", user.id);
+    .from("user profile")
+    .update(surveyData)
+    .eq("id", user.id);
 
     if (error) {
       console.error("Error updating profile:", error);
     } else {
-      changePage("browse");
-      location.reload();
-    }
-  }
+    
+    const { data: profile, error: profileError } = await supabase
+      .from("user profile")
+      .select("field_of_interest, resource_interests, education_level")
+      .eq("id", user.id)
+      .single();
 
+    const { data: articlesData, error: articleError } = await supabase
+    .from("articles")
+    .select("id, title, content, tags, author, link");
+  
+    if (articleError) {
+    console.error("Failed to fetch articles for recommendations:", articleError);
+    return;
+    }
+  
+    const interestTags = [
+      ...(surveyData.resource_interests || []),
+      ...(surveyData.field_of_interest ? [surveyData.field_of_interest] : []),
+      ...(surveyData.education_level ? [surveyData.education_level] : [])
+    ].map(tag => tag.toLowerCase());
+  
+    const scoredArticles = articlesData.map(article => {
+    const articleTags = (article.tags || []).map(tag => tag.toLowerCase());
+    const matches = interestTags.filter(tag => articleTags.includes(tag));
+    return { article, score: matches.length };
+  });
+  
+  const surveyRecs = scoredArticles
+    .filter(a => a.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3);
+    console.log("Interest Tags:", interestTags);
+    console.log("Articles from Supabase:", articlesData);
+    console.log("Scored Recommendations:", surveyRecs);
+  
+  // store in App state through props if passed down:
+    console.log("Is setRecommendations a function?", typeof setRecommendations);
+    setRecommendations(surveyRecs);
+    setTimeout(() => {
+        changePage("browse");
+      }, 50);
+    changePage("browse");
+  }
+}
 
   return (
     <div className="login-page">
