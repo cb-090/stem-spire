@@ -9,15 +9,18 @@ import Results from "./Results.jsx";
 import Favorites from "./Favorites.jsx";
 import TagFilter from "./TagFilter.jsx";
 import { supabase } from "./supabase";
+import Recommended from "./Recommended.jsx";
 
 function App() {
   const [user, setUser] = useState(null);
   const [userName, setUserName] = useState("");
   const [query, setQuery] = useState(null);
   const [articles, setArticles] = useState([]);
+  const [recommendations,setRecommendations] = useState([])
   const [userFavorites, setUserFavorites] = useState([]);
   const availableTags = ["college", "internship", "study tips", "summer program", "career development"];
   const [selectedTags, setSelectedTags] = useState([]);
+  const [click, setClick] = useState()
 
   // const articles = [{title: "Article 1", content: "this is content for the purposes of testing how articles are displayed", author: "author here", tags: ["college"]},
   //   {title: "Article 2", content:"this website is designed to connect young girls and people interested in STEM with the right resources for them!", author: "Girls Who Code", tags: ["summer program", "internship", "career development"]},
@@ -201,7 +204,8 @@ function App() {
         title,
         content,
         tags,
-        author
+        author,
+        link
       `)
     if (error) {
       console.error("Error fetching articles:", error.message);
@@ -227,7 +231,7 @@ function App() {
         .sort((a, b) => b.matchCount - a.matchCount);
     }
     setArticles(filtered);
-  }
+  } 
    
   return (
     <>
@@ -256,6 +260,7 @@ function App() {
           setIsSignedIn={setIsSignedIn}
           warning={warning}
           setWarning={setWarning}
+          setRecommendations={setRecommendations}
         />
       )}
       {isAbout && <About />}
@@ -271,11 +276,17 @@ function App() {
             selectedTags={selectedTags}
             onChange={setSelectedTags}
           />
-          {articles && <Results articles={articles} favorites={userFavorites} user={user} favorite={favorite} unfavorite={unfavorite}/>}
+          <Recommended userName={userName}
+            articles={articles}
+            recommendations={recommendations || []}
+            setRecommendations={setRecommendations}
+            click={click} />
+          {articles && <Results articles={articles} favorites={userFavorites} user={user} favorite={favorite} unfavorite={unfavorite} click={click} setClick={setClick}/>}
         </div>
       )}
+
       {isFavorites && (
-        <Favorites userName={userName} favorites={userFavorites} unfavorite={unfavorite} />
+        <Favorites userName={userName} favorites={userFavorites} unfavorite={unfavorite}recommendations={recommendations} setRecommendations={setRecommendations}articles = {articles} />
       )}
     </>
   );

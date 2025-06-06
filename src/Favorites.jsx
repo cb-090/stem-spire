@@ -1,10 +1,6 @@
 import './Favorites.css'; 
 
 export default function Favorites({userName, favorites, unfavorite}) {
-  // const placeholderFavorites = Array.from({ length: 10 });
-  // console.log("userName in Favorites.jsx:", userName.userName);
-
-
   return (
     <div className="favorites-page">
       <div className="favorites-header">
