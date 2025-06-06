@@ -266,6 +266,7 @@ function App() {
           setIsSignedIn={setIsSignedIn}
           warning={warning}
           setWarning={setWarning}
+          setRecommendations={setRecommendations}
         />
       )}
       {isAbout && <About />}
