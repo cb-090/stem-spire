@@ -68,7 +68,9 @@ export default function Recommended({
   return (
     <div>
       <h2>Recommended Articles for {userName}!</h2>
-      <p>Here's some articles you might like!</p>
+      {recommendations.length === 0 && (
+        <p>No recommended articles yet.</p>
+      )}
       {recommendations.map((rec, key) => (
         <li className="article-box" key={key}>
           <div className="article-header">
