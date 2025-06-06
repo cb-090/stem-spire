@@ -1,6 +1,10 @@
 import { useEffect } from "react";
 export default function Recommended({
   userName,
+  favorites,
+  user,
+  favorite,
+  unfavorite,
   articles,
   recommendations,
   setRecommendations,
@@ -64,12 +68,33 @@ export default function Recommended({
   return (
     <div>
       <h2>Recommended Articles for {userName}!</h2>
+      <p>Here's some articles you might like!</p>
       {recommendations.map((rec, key) => (
         <li className="article-box" key={key}>
           <div className="article-header">
             <span>{rec.article.title}</span>
             <div className="right-group">
               <span>{rec.article.author}</span>
+              <p id="articleId" hidden>
+                  {rec.article.id}
+                </p>
+                {user && (
+                  <button
+                    onClick={() =>
+                      favorites.find(
+                        (favorite) => favorite.article_id == rec.article.id
+                      )
+                        ? unfavorite(rec.article.id)
+                        : favorite(rec.article.id)
+                    }
+                  >
+                    {favorites.find(
+                      (favorite) => favorite.article_id == rec.article.id
+                    )
+                      ? "⭐"
+                      : "☆"}
+                  </button>
+                )}
             </div>
           </div>
           <p className="article-text">{rec.article.content}</p>
