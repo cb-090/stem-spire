@@ -7,7 +7,7 @@ export default function Results({
   favorite,
   unfavorite,
   click,
-  setClick
+  setClick,
 }) {
   const openInNewTab = (url) => {
     window.open(url, "_blank", "noreferrer");
@@ -16,12 +16,14 @@ export default function Results({
     <div className="scroll-container">
       <ul className="results-list">
         {articles.map((article, key) => (
-          <li
-            onClick={() => {openInNewTab(article.link); setClick(article);}}
-            className="article-box"
-            key={key}
-          >
-            <div className="article-header">
+          <li className="article-box" key={key}>
+            <div
+              onClick={() => {
+                openInNewTab(article.link);
+                setClick(article);
+              }}
+              className="article-header"
+            >
               <span>{article.title}</span> {/* Title */}
               <div className="right-group">
                 <span>{article.author}</span> {/* author */}
