@@ -1,3 +1,4 @@
+import "./App.css";
 import "./Results.css";
 
 export default function Results({

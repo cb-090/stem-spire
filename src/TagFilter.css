@@ -14,7 +14,7 @@
 }
   
   .tag-button.selected {
-    background-color: #005f73;
+    background-color: #1d7f9f;;
     color: white;
-    border: 1px solid #005f73;
+    border: 1px solid #1d7f9f;
   }
