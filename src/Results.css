@@ -11,15 +11,14 @@
     gap: 1.5em;
   }
   
-  .article-box {
-    background-color: #dcf1fd;
+  /* .article-box {
     padding: 1.25em;
     border-radius: 8px;
     box-shadow: 8px 8px 3px rgba(0,0,0,0.1);
     border: 1px solid black;
-  }
+  } */
   
-  .article-header {
+  /* .article-header {
     display: flex;
     justify-content: space-between;
     font-weight: bold;
@@ -40,15 +39,15 @@
     padding: 0.5em;
     border-radius: 8px;
     margin: 0;
-  }
+  } */
 
-.scroll-container {
+/* .scroll-container {
     flex: 1;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 1.5em;
-  }
+  } */
 
   .article-tags {
     margin-top: 8px;
@@ -60,7 +59,7 @@
   }
   
   .tag {
-    background-color: #006064;
+    background-color: #1d7f9f;;
     color: white;
     padding: 3px 7px;
     border-radius: 20px;

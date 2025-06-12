@@ -1,9 +1,10 @@
+import "./App.css";
 import './Favorites.css'; 
 
 export default function Favorites({userName, favorites, unfavorite}) {
   return (
-    <div className="favorites-page">
-      <div className="favorites-header">
+    <div className="page">
+      <div className="page-header">
         <h2>Favorites</h2>
         <p>Hi! {userName}</p>
       </div>

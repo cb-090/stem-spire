@@ -236,20 +236,23 @@ function App() {
    
   return (
     <>
-      <header>
+    <nav className="navbar">
+      <div className="nav-left">
         <h1>STEM-Spire</h1>
-        <nav id="navBar">
-          {/* checks if signed in, if not, shows log in, if logged in, shows log out */}
+      </div>
 
-          <button onClick={() => changePage("browse")}>Browse</button>
+      <div className="nav-center">
+        <span className={`nav-link ${isBrowsing ? "active" : ""}`} onClick={() => changePage("browse")}>Browse</span>
+        {user && <span className={`nav-link ${isFavorites ? "active" : ""}`} onClick={() => changePage("favorites")}>Favorites</span>}
+        <span className={`nav-link ${isAbout ? "active" : ""}`} onClick={() => changePage("about")}>About</span>
+      </div>
 
-          {user && <button onClick={() => changePage("favorites")}>Favorites</button>}
+      <div className="nav-right">
+        {!user && <button onClick={() => changePage("login")}>Log In</button>}
+        {user && <button onClick={signOut}>Log Out</button>}
+      </div>
+    </nav>
 
-          <button onClick={() => changePage("about")}>About</button>
-          {!user && <button onClick={() => changePage("login")}>Log In</button>}
-          {user && <button onClick={signOut}>Log Out</button>}
-        </nav>
-      </header>
       {isLogin && (
         <LogIn
           changePage={changePage}
@@ -266,7 +269,7 @@ function App() {
       )}
       {isAbout && <About />}
       {isBrowsing && (
-        <div className="browse-page">
+        <div className="page">
           <div className="page-header">
             <h2>Browse</h2>
             <p>Hi! {userName}</p>
