@@ -280,8 +280,9 @@ header button {
     color: #145064;
   }  
 
+  /* tags in article box display */
   .article-tags {
-    margin-top: 12px;
+    margin-top: 15px;
     display: flex;
     justify-content: center;
     align-items: center; 
