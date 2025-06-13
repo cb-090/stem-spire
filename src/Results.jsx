@@ -25,7 +25,7 @@ export default function Results({
               }}
               className="article-header"
             >
-              <span>{article.title}</span> {/* Title */}
+              <span className = "article-title">{article.title}</span> {/* Title */}
               <div className="right-group">
                 <span>{article.author}</span> {/* author */}
                 <p id="articleId" hidden>

@@ -6,13 +6,13 @@ export default function Favorites({userName, favorites, unfavorite}) {
     <div className="page">
       <div className="page-header">
         <h2>Favorites</h2>
-        <p>Hi! {userName}</p>
+        <p>Hi {userName}!</p>
       </div>
-      <div className="scroll-container">
+      <div className="results-list">
       {favorites.map((article) => (
         <li className="article-box" key={article.article_id}>
           <div className="article-header">
-              <span>{article.articles.title}</span> {/* Title */}
+              <span className = "article-title">{article.articles.title}</span> {/* Title */}
               <div className="right-group">
                 <span>{article.author}</span> 
                 <button onClick={async () => unfavorite(article.article_id)}>⭐</button>
