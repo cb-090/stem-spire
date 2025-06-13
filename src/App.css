@@ -2,13 +2,14 @@
   width: 100%;
 }
 
-/* @font-face {
+@font-face {
     font-family: 'Ultra';
     src: url('/Ultra-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
   }
 
+/*
   @font-face {
     font-family: 'Ribeye';
     src: url('/Ribeye-Regular.ttf') format('truetype');
@@ -31,16 +32,37 @@
     font-style: normal;
   }
 
-  @font-face {
+  /* @font-face {
     font-family: 'Jost';
     src: url('/Jost-VariableFont_wght.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  } */
+
+  @font-face {
+    font-family: 'Nunito';
+    src: url('/Nunito-VariableFont_wght.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
   }
 
   @font-face {
-    font-family: 'Nunito';
-    src: url('/Nunito-VariableFont_wght.ttf') format('truetype');
+    font-family: 'BreeSerif';
+    src: url('BreeSerif-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'CreateRound';
+    src: url('CreateRound-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'Moul';
+    src: url('Moul-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
   }
@@ -152,7 +174,7 @@ header button {
 }
 
 .page-header {
-  margin: 0;
+  margin: 0 0 1em 0;
   /* background: linear-gradient(to right,#ffcfd2, #f1c0e8, #cfbaf0, #a3c4f3, #90dbf4, #56cfe1);
   background: linear-gradient(to right,#cdb4db, #ffc8dd, #bde0fe, #a2d2ff); */
   /* background: linear-gradient(to right,#ffd6ff, #e7c6ff, #bbd0ff,#abc4ff, #98d5e9); */
@@ -167,13 +189,12 @@ header button {
 .page-header h2 {
     margin: 0;
     padding-bottom: 0.3em;
-    font-size: 1.6em;
-
+    font-size: 1.8em;
 }
 
 .page-header p {
     font-family: Nunito;
-    font-size: 0.75em;
+    font-size: 0.8em;
     margin: 0;
   }
 
@@ -184,10 +205,7 @@ header button {
     padding: 1em;
     box-sizing: border-box;
     list-style-type: none;
-    flex: 1;
     overflow-y: auto;
-    display: flex;
-    flex-direction: column;
     gap: 1.5em;
   }
 
@@ -205,17 +223,18 @@ header button {
     align-items: center; 
     justify-content: space-between;
     font-weight: bold;
+    font-size: 1.1em;
     margin-bottom: 0.5em;
     border: 1px solid black;
     border-radius: 8px;
-    padding: 1em;
+    padding: 0.75em;
   
   }
 
   .right-group {
     display: flex;
     align-items: center;
-    gap: 1em;
+    gap: 1.5em;
     max-width: 280px;
   }
 
