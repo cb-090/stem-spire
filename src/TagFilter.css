@@ -1,4 +1,5 @@
 /* tags under search bar */
+
 .tag-filter {
     display: flex;
     justify-content: center; 
@@ -7,6 +8,7 @@
     flex-wrap: wrap;
     margin-top: 12px;
     margin-bottom: 0;
+    padding: 0;
   }
 
 .tag-button {
@@ -16,7 +18,9 @@
 }
   
   .tag-button.selected {
-    background-color: #187897;
+    /* background-color: #187897; */
+    background-color: #e183a7;
     color: white;
-    border: 1px solid #187897;
+    /* border: 1px solid #187897; */
+    border: 1px solid #e183a7;;
   }
