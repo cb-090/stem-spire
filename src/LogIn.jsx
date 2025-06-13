@@ -192,7 +192,7 @@ export default function LogIn({
             <label>Email: </label>
             <input id="email" placeholder="Email"></input>
             <label>Password: </label>
-            <input id="password" placeholder="*************"></input>
+            <input id="password" type="password" placeholder="*************"></input>
             <button onClick={signIn}>Sign In</button>
             <p>If you don't have an account,</p>
             <button onClick={createAccount}>Sign Up</button>
@@ -207,8 +207,12 @@ export default function LogIn({
             <label>Email: </label>
             <input id="email" placeholder="Email"></input>
             <label>Password: </label>
-            <input id="password" placeholder="*************"></input>
+            <input id="password" type="password" placeholder="*************"></input>
             <button onClick={signUp}>Sign Up</button>
+
+            <p>Already have an account?</p>
+            <button type="button" onClick={() => setIsNewUser(false)}>Back to Log In</button>
+
           </form>
         )}
         {/* this should just be the first time you sign up, otherwise it takes you to the home page */}

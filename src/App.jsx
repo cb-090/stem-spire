@@ -272,7 +272,7 @@ function App() {
         <div className="page">
           <div className="page-header">
             <h2>Browse</h2>
-            <p>Hi {userName}!</p>
+            {user && <p>Hi {userName}!</p>}
           </div>
           <Recommended user={user}favorites={userFavorites}  favorite={favorite} unfavorite={unfavorite} userName={userName} articles = {articles}recommendations={recommendations || []}setRecommendations={setRecommendations} click={click}/>
 
