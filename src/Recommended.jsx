@@ -77,12 +77,14 @@ export default function Recommended({
 
   return (
     <div className="recommend-wrapper">
-      <h2>Recommended Articles for {userName}!</h2>
-      <p>Here's some articles you might like!</p>
+      <div className = "recommend-header">
+        <h2>Recommended Articles for {userName}:</h2>
+        <p>Here's some articles you might like!</p>
   
-      {recommendations.length === 0 && (
-        <p>No recommended articles yet.</p>
-      )}
+        {recommendations.length === 0 && (
+          <p>No recommended articles yet.</p>
+        )}
+      </div>
   
       <ul className="recommend-grid">
         {recommendations

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./SearchBar.css";
 
 export default function SearchBar({ action }) {
   const [content, setContent] = useState("");
@@ -11,10 +12,10 @@ export default function SearchBar({ action }) {
   }
 
   return (
-    <form onSubmit={submit}>
-      <p>Search for useful STEM-based resources!</p><br />
-      <input value={content} onChange={(e) => setContent(e.target.value)} />
-      <button>Search</button>
+    <form onSubmit={submit} className="search-form">
+      <p className="search-text"> Search for useful STEM-based resources!</p><br />
+      <input className="search-input" value={content} onChange={(e) => setContent(e.target.value)} placeholder="Enter title, keywords, author, etc." />
+      <button className="search-button">Search</button>
     </form>
   );
 }
