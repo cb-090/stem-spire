@@ -5,12 +5,13 @@
     gap: 0.5em;
     flex-wrap: wrap;
     margin-top: 15px;
+    margin-bottom: 0;
   }
 
 .tag-button {
-    font-size: 0.80em;
+    font-size: 0.85em;
     border-radius: 20px;
-    padding: 3px 7px;
+    padding: 4px 12px;
 }
   
   .tag-button.selected {

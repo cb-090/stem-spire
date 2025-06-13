@@ -36,8 +36,8 @@
     gap: 1.5em;
   } */
 
-  .article-tags {
-    margin-top: 8px;
+  /* .article-tags {
+    margin-top: 12px;
     display: flex;
     justify-content: center; 
     align-items: center; 
@@ -48,9 +48,9 @@
   .tag {
     background-color: #187897;
     color: white;
-    padding: 3px 7px;
+    padding: 4px 12px;
     border-radius: 20px;
-    font-size: 0.80em;
-  }
+    font-size: 0.85em;
+  } */
   
   
