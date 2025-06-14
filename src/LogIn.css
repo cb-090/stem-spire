@@ -49,6 +49,7 @@ form h2 {
     align-self: center;
     border-radius: 10px;
     cursor: pointer;
+    color: black;
   }
 
   form p {
@@ -114,5 +115,6 @@ form h2 {
     justify-content: center;
     gap: 1.5em;
     margin-top: 0.5em;
+    color: black;
   }
   

@@ -163,6 +163,7 @@ header button {
     border: 1px solid black;
     border-radius: 15px;
     cursor: pointer;
+    color: black;
   }
 
 .nav-right button:hover {
@@ -292,9 +293,9 @@ header button {
   }
   
   .tag {
-    /* background-color: #187897; */
-    background-color: #e183a7;
-    color: white;
+    /* background-color: #80c2d9; */
+    background-color: #eea8c3;
+    color: black;
     padding: 4px 12px;
     border-radius: 20px;
     font-size: 0.85em;

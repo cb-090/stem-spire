@@ -14,7 +14,7 @@ export default function Favorites({userName, favorites, unfavorite}) {
           <div className="article-header">
               <span className = "article-title">{article.articles.title} {article.title} <span className="external-icon">↗️</span></span> {/* Title */}
               <div className="right-group">
-                <span>{article.author}</span> 
+                <span>{article.articles.author}</span> 
                 <button onClick={async () => unfavorite(article.article_id)}>⭐</button>
                   </div>
             </div>

@@ -17,10 +17,10 @@
     padding: 4px 12px;
 }
   
-  .tag-button.selected {
-    /* background-color: #187897; */
-    background-color: #e183a7;
-    color: white;
-    /* border: 1px solid #187897; */
-    border: 1px solid #e183a7;;
-  }
+.tag-button.selected {
+  /* background-color: #80c2d9; */
+  background-color: #eea8c3;
+  color: black;
+  /* border: 1px solid #80c2d9; */
+  border: 1px solid #eea8c3;
+}
