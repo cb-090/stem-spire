@@ -42,7 +42,7 @@ form h2 {
   }
 
  form button {
-    background-color: #b0d0f0;
+    background-color: #98d5e9;
     width: 100px;
     padding: 0.6em 0.1em;
     margin-top: 0.5em;
@@ -67,3 +67,52 @@ form h2 {
     padding: 0;
     text-align: center;
   }
+
+/* questionaire styling */
+ .questionnaire {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+  }
+
+  .question {
+    margin: 1em;
+    padding: 0;
+    font-weight: bold;
+    font-size: 1.05em;
+    width: 450px;
+    align-self: center;
+    line-height: 1.5;
+  }
+
+  .option-container {
+    background-color: white;
+    border-radius: 30px;
+    padding: 0.2em 1em;
+    margin-bottom: 0.75em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    gap: 0.5em;
+    height: 2.2em;
+    width: 380px;
+    align-self: center;
+    
+  }
+  
+  .option-container:hover {
+    background-color: #ecf9fd;
+  }
+
+  form label input {
+    margin-right: 0.5em;
+  }
+
+  .button-row {
+    display: flex;
+    justify-content: center;
+    gap: 1.5em;
+    margin-top: 0.5em;
+  }
+  
