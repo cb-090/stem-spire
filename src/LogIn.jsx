@@ -21,7 +21,8 @@ export default function LogIn({
     field_of_interest: "",
     resource_interests: [],
   });
-  
+
+  const [surveyWarning, setSurveyWarning] = useState("");
   const surveyQuestions = [
     {
       id: "education_level",
@@ -226,9 +227,11 @@ export default function LogIn({
       {isSignedIn && isNewUser && (
         <div className="form-box">
           <form>
-            <p>{surveyQuestions[surveyStep].question}</p>
+            {surveyWarning && <p id="warning">{surveyWarning}</p>}
+            <h2 className = "questionnaire" >Questionnaire</h2>
+            <p className = "question">{surveyQuestions[surveyStep].question}</p>
             {surveyQuestions[surveyStep].options.map((option, idx) => (
-              <div key={idx}>
+              <div className = "option-container" key={idx}>
                 <label>
                   <input
                     type={surveyQuestions[surveyStep].multi ? "checkbox" : "radio"}
@@ -248,15 +251,43 @@ export default function LogIn({
               </div>
             ))}
 
-            <div>
+            <div className="button-row">
               {surveyStep > 0 && (
                 <button type="button" onClick={() => setSurveyStep((prev) => prev - 1)}>Back</button>
               )}
               {surveyStep < surveyQuestions.length - 1 ? (
-                <button type="button" onClick={() => setSurveyStep((prev) => prev + 1)}>Next</button>
-              ) : (
-                <button type="button" onClick={submitSurvey}>Submit</button>
-              )}
+                <button
+                    type="button"
+                    onClick={() => {
+                    const current = surveyQuestions[surveyStep];
+                    const answer = surveyData[current.id];
+                    const isAnswered = current.multi ? answer.length > 0 : !!answer;
+                    if (!isAnswered) {
+                        setSurveyWarning("Please select an option before continuing.");
+                    } else {
+                        setSurveyWarning("");
+                        setSurveyStep((prev) => prev + 1);
+                    }
+                    }}
+                > Next
+                </button>
+                ) : (
+                <button
+                    type="button"
+                    onClick={() => {
+                    const current = surveyQuestions[surveyStep];
+                    const answer = surveyData[current.id];
+                    const isAnswered = current.multi ? answer.length > 0 : !!answer;
+                    if (!isAnswered) {
+                        setSurveyWarning("Please select an option before submitting.");
+                    } else {
+                        setSurveyWarning("");
+                        submitSurvey();
+                    }
+                    }}
+                > Submit
+                </button>
+                )}
             </div>
           </form>
         </div>
