@@ -16,6 +16,7 @@ export default function Results({
   const openInNewTab = (url) => {
     window.open(url, "_blank", "noreferrer");
   };
+  
   return (
     <div className="scroll-container">
       <ul className="results-list">
