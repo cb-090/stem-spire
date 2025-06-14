@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import "./App.css";
+import search from "./searchService.js";
 
 import LogIn from "./LogIn.jsx";
 import About from "./About.jsx";
@@ -228,6 +229,10 @@ function App() {
     }
     setArticles(filtered);
   }
+
+  useEffect((query) => {
+    search(query)
+  }, [query])
    
   return (
     <>
