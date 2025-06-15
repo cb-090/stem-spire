@@ -1,6 +1,6 @@
 import './Recommend.css'; 
 import './App.css';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Recommended({
   userName,
@@ -13,6 +13,8 @@ export default function Recommended({
   setRecommendations,
   click,
 }) {
+  const [clickedIds, setClickedIds] = useState(new Set());
+
   console.log("Incoming recommendations:", recommendations);
   if (!Array.isArray(recommendations)) {
     console.error("recommendations is not an array:", recommendations);
@@ -93,7 +95,17 @@ export default function Recommended({
             .map((rec, key) => (
               <li className="article-box" key={key}>
                 <div className="article-header-r">
-                  <span className="article-title-r">{rec.article.title}</span>
+                  <span
+                    className={`article-title-r ${clickedIds.has(rec.article.id) ? "clicked-title" : ""}`}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        window.open(rec.article.link, "_blank", "noreferrer");
+                        setClickedIds(new Set([...clickedIds, rec.article.id]));
+                    }}
+                      style={{ cursor: "pointer" }}
+                  >
+                    {rec.article.title} <span className="external-icon">↗️</span>
+                  </span>
                   <div className="right-group">
                     <p id="articleId" hidden>{rec.article.id}</p>
                     {userName && (
