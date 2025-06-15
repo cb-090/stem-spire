@@ -183,7 +183,8 @@ function App() {
           title,
           content,
           tags,
-          author
+          author,
+          link
         )
       `)
       .eq("user_id", user_id);
