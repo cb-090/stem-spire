@@ -1,26 +1,35 @@
-// supabase/functions/embed/index.ts
-import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
+import { serve } from "https://deno.land/std@0.177.0/http/server.ts"
 
 serve(async (req) => {
-  const { input } = await req.json()
+  const { text } = await req.json()
 
-  const response = await fetch("https://api.openai.com/v1/embeddings", {
+  if (!text) {
+    return new Response(JSON.stringify({ error: "Missing 'text' field" }), {
+      status: 400,
+    })
+  }
+
+  const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY")
+  const model = "text-embedding-3-small"
+
+  const openaiRes = await fetch("https://api.openai.com/v1/embeddings", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${Deno.env.get("OPENAI_API_KEY")}`,
+      "Authorization": `Bearer ${OPENAI_API_KEY}`,
     },
     body: JSON.stringify({
-      model: "text-embedding-3-small",
-      input,
+      input: text,
+      model,
     }),
   })
 
-  if (!response.ok) {
-    return new Response("Failed to fetch embedding", { status: 500 })
+  const json = await openaiRes.json()
+
+  if (!openaiRes.ok) {
+    return new Response(JSON.stringify(json), { status: openaiRes.status })
   }
 
-  const json = await response.json()
   return new Response(JSON.stringify({ embedding: json.data[0].embedding }), {
     headers: { "Content-Type": "application/json" },
   })
