@@ -58,11 +58,7 @@ function App() {
     // Check current session
     supabase.auth.getSession().then(({ data: { session } }) => {
       const currentUser = session?.user ?? null;
-      setUser(currentUser);
-      console.log("Current user:", currentUser, currentUser?.id);
       if (currentUser) {
-        setIsNewUser(false);
-        getUserName(currentUser);
         showFavorites();
       }
       getArticles()
@@ -71,7 +67,15 @@ function App() {
     // Listen for future login/logout
     const { data: listener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
-        setUser(session?.user ?? null);
+        const currentUser = session?.user ?? null;
+        setUser(currentUser);
+        console.log("Current user:", currentUser, currentUser?.id);
+        if (currentUser) {
+          setIsNewUser(false);
+          getUserName(currentUser);
+          showFavorites();
+        }
+        getArticles()
       }
     );
 
