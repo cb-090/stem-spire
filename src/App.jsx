@@ -238,6 +238,7 @@ function App() {
         .sort((a, b) => b.matchCount - a.matchCount);
     }
     setArticles(filtered);
+
   }
 
   useEffect( () => {
@@ -300,6 +301,7 @@ function App() {
             onChange={setSelectedTags}
             
           />
+
           {articles && <Results articles={articles} favorites={userFavorites} user={user} favorite={favorite} unfavorite={unfavorite} click={click} setClick={setClick}/>}
         </div>
       )}

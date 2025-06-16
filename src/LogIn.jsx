@@ -23,6 +23,7 @@ export default function LogIn({
   });
 
   const [surveyWarning, setSurveyWarning] = useState("");
+
   const surveyQuestions = [
     {
       id: "education_level",
