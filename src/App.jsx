@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import "./App.css";
+import getEmbedding from "./utils/embeddingService.js";
 
 import LogIn from "./LogIn.jsx";
 import About from "./About.jsx";
@@ -57,11 +58,7 @@ function App() {
     // Check current session
     supabase.auth.getSession().then(({ data: { session } }) => {
       const currentUser = session?.user ?? null;
-      setUser(currentUser);
-      console.log("Current user:", currentUser, currentUser?.id);
       if (currentUser) {
-        setIsNewUser(false);
-        getUserName(currentUser);
         showFavorites();
       }
       getArticles()
@@ -70,7 +67,15 @@ function App() {
     // Listen for future login/logout
     const { data: listener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
-        setUser(session?.user ?? null);
+        const currentUser = session?.user ?? null;
+        setUser(currentUser);
+        console.log("Current user:", currentUser, currentUser?.id);
+        if (currentUser) {
+          setIsNewUser(false);
+          getUserName(currentUser);
+          showFavorites();
+        }
+        getArticles()
       }
     );
 
@@ -233,7 +238,19 @@ function App() {
         .sort((a, b) => b.matchCount - a.matchCount);
     }
     setArticles(filtered);
-  } 
+
+  }
+
+  useEffect( () => {
+    async function search(query) {
+    const response = await getEmbedding(query)
+    console.log(`Query: ${query}`)
+    console.log(`Response: ${response}`)
+  }
+  if (query) {
+    search(query)
+  }
+}, [query])
    
   return (
     <>
@@ -275,7 +292,7 @@ function App() {
             <h2>Browse</h2>
             {user && <p>Hi {userName}!</p>}
           </div>
-          <Recommended user={user}favorites={userFavorites}  favorite={favorite} unfavorite={unfavorite} userName={userName} articles = {articles}recommendations={recommendations || []}setRecommendations={setRecommendations} click={click}/>
+          <Recommended user={user}favorites={userFavorites}  favorite={favorite} unfavorite={unfavorite} userName={userName} articles = {articles}recommendations={recommendations} setRecommendations={setRecommendations} click={click}/>
 
           <SearchBar action = {setQuery} />
           <TagFilter
@@ -284,7 +301,6 @@ function App() {
             onChange={setSelectedTags}
             
           />
-
 
           {articles && <Results articles={articles} favorites={userFavorites} user={user} favorite={favorite} unfavorite={unfavorite} click={click} setClick={setClick}/>}
         </div>
