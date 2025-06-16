@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import "./App.css";
-// import search from "./searchService.js";
+import getEmbedding from "./utils/embeddingService.js";
 
 import LogIn from "./LogIn.jsx";
 import About from "./About.jsx";
@@ -240,9 +240,16 @@ function App() {
     setArticles(filtered);
   }
 
-  useEffect((query) => {
-    // search(query)
-  }, [query])
+  useEffect( () => {
+    async function search(query) {
+    const response = await getEmbedding(query)
+    console.log(`Query: ${query}`)
+    console.log(`Response: ${response}`)
+  }
+  if (query) {
+    search(query)
+  }
+}, [query])
    
   return (
     <>

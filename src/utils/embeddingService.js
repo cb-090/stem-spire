@@ -1,3 +1,20 @@
+export default async function getEmbedding(query) {
+  const res = await fetch('https://mtjpyqatrtujdzpsireh.functions.supabase.co/embed', {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ input: query })
+  })
+
+  if (!res.ok) {
+    const error = await res.json()
+    console.log(error)
+    throw new Error(error.error?.message || "Embedding failed")
+  }
+
+  const { embedding } = await res.json()
+  return embedding
+}
+
 // import OpenAI from "openai";
 // import { getAPIKey } from "./openAIConfig";
 
@@ -32,23 +49,3 @@
 //     return
 
 // }
-
-export default async function search(query) {
-  // const response = await fetch("https://api.openai.com/v1/embeddings", {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     Authorization: `Bearer ${apiKey}`, // Not safe to do in frontend!
-  //   },
-  //   body: JSON.stringify({
-  //     model: "gpt-4",
-  //     messages: [{ role: "user", content: prompt }]
-  //   }),
-  // });
-
-  // const data = await response.json();
-  // console.log(`Input: ${query}`)
-  // console.log(`Model: text-embedding-3-small`)
-  // console.log(`Embedding vector size: ${data.length}`)
-  // console.log(data);
-}
