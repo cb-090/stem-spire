@@ -37,7 +37,7 @@ export default function Favorites({userName, favorites, unfavorite}) {
             </span>
               <div className="right-group">
                 <span>{article.articles.author}</span> 
-                <button onClick={async () => unfavorite(article.article_id)}>⭐</button>
+                <button onClick={async () => unfavorite(article.article_id)}>🩷</button>
                   </div>
             </div>
             <p className="article-text">{article.articles.content}</p>

@@ -54,8 +54,8 @@ export default function Results({
                     {favorites.find(
                       (favorite) => favorite.article_id == article.id
                     )
-                      ? "⭐"
-                      : "☆"}
+                      ? "🩷"
+                      : "♡"}
                   </button>
                 )}
               </div>

@@ -121,8 +121,8 @@ export default function Recommended({
                         {favorites.find(
                           (favorite) => favorite.article_id == rec.article.id
                         )
-                          ? "⭐"
-                          : "☆"}
+                          ? "🩷"
+                          : "♡"}
                       </button>
                     )}
                   </div>
