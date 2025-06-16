@@ -1,4 +1,7 @@
-import { useEffect } from "react";
+import './Recommend.css'; 
+import './App.css';
+import { useEffect, useState } from "react";
+
 export default function Recommended({
   userName,
   favorites,
@@ -10,6 +13,8 @@ export default function Recommended({
   setRecommendations,
   click,
 }) {
+  const [clickedIds, setClickedIds] = useState(new Set());
+
   console.log("Incoming recommendations:", recommendations);
   if (!Array.isArray(recommendations)) {
     console.error("recommendations is not an array:", recommendations);
@@ -73,55 +78,70 @@ export default function Recommended({
   }
 
   return (
-    <div>
-      <h2>Recommended Articles for {userName}!</h2>
-      <p>Here's some articles you might like!</p>
-
-      {recommendations.length === 0 && (
-        <p>No recommended articles yet.</p>
-      )}
-      {recommendations
-        .filter((rec) => rec && rec.article) // skip nulls or malformed entries
-        .map((rec, key) => (
-          <li className="article-box" key={key}>
-            <div className="article-header">
-              <span>{rec.article.title}</span>
-            <div className="right-group">
-              <span>{rec.article.author}</span>
-              <p id="articleId" hidden>
-                  {rec.article.id}
-                </p>
-                {user && (
-                  <button
-                    onClick={() =>
-                      favorites.find(
-                        (favorite) => favorite.article_id == rec.article.id
-                      )
-                        ? unfavorite(rec.article.id)
-                        : favorite(rec.article.id)
-                    }
-                  >
-                    {favorites.find(
-                      (favorite) => favorite.article_id == rec.article.id
-                    )
-                      ? "⭐"
-                      : "☆"}
-                  </button>
-                )}
-            </div>
-          </div>
-          <p className="article-text">{rec.article.content}</p>
-          {rec.article.tags?.length > 0 && (
-            <div className="article-tags">
-              {rec.article.tags.map((tag, index) => (
-                <span className="tag" key={index}>
-                  {tag}
-                </span>
-              ))}
-            </div>
+    userName && (
+      <div className="recommend-wrapper">
+        <div className="recommend-header">
+          <h2>Recommended Articles for {userName}:</h2>
+          {recommendations.length > 0 ? (
+            <p>Here's some articles you might like!</p>
+          ) : (
+            <p>No recommended articles yet.</p>
           )}
-        </li>
-      ))}
-    </div>
-  );
-}
+        </div>
+  
+        <ul className="recommend-grid">
+          {recommendations
+            .filter((rec) => rec && rec.article)
+            .map((rec, key) => (
+              <li className="article-box" key={key}>
+                <div className="article-header-r">
+                  <span
+                    className={`article-title-r ${clickedIds.has(rec.article.id) ? "clicked-title" : ""}`}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        window.open(rec.article.link, "_blank", "noreferrer");
+                        setClickedIds(new Set([...clickedIds, rec.article.id]));
+                    }}
+                      style={{ cursor: "pointer" }}
+                  >
+                    {rec.article.title} <span className="external-icon">↗️</span>
+                  </span>
+                  <div className="right-group">
+                    <p id="articleId" hidden>{rec.article.id}</p>
+                    {userName && (
+                      <button
+                        onClick={() =>
+                          favorites.find(
+                            (favorite) => favorite.article_id == rec.article.id
+                          )
+                            ? unfavorite(rec.article.id)
+                            : favorite(rec.article.id)
+                        }
+                      >
+                        {favorites.find(
+                          (favorite) => favorite.article_id == rec.article.id
+                        )
+                          ? "⭐"
+                          : "☆"}
+                      </button>
+                    )}
+                  </div>
+                </div>
+                <p className="article-text">{rec.article.content}</p>
+                {rec.article.tags?.length > 0 && (
+                  <div className="article-tags">
+                    {rec.article.tags.map((tag, index) => (
+                      <span className="tag" key={index}>
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </li>
+            ))}
+        </ul>
+      </div>
+    )
+  );  
+}  
+

@@ -1,3 +1,5 @@
+import { useState } from "react";
+import "./App.css";
 import "./Results.css";
 
 export default function Results({
@@ -9,22 +11,31 @@ export default function Results({
   click,
   setClick,
 }) {
+  const [clickedIds, setClickedIds] = useState(new Set());
+
   const openInNewTab = (url) => {
     window.open(url, "_blank", "noreferrer");
   };
+  
   return (
     <div className="scroll-container">
       <ul className="results-list">
         {articles.map((article, key) => (
           <li className="article-box" key={key}>
-            <div
-              onClick={() => {
-                openInNewTab(article.link);
-                setClick(article);
-              }}
-              className="article-header"
+            <div className="article-header"
             >
-              <span>{article.title}</span> {/* Title */}
+              <span
+                className={`article-title ${clickedIds.has(article.id) ? "clicked-title" : ""}`}
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent any parent click events, if needed
+                  openInNewTab(article.link);
+                  setClick(article);
+                  setClickedIds(new Set([...clickedIds, article.id]));
+                }}
+                  style={{ cursor: "pointer" }}
+              >
+                {article.title} <span className="external-icon">↗️</span>
+            </span>
               <div className="right-group">
                 <span>{article.author}</span> {/* author */}
                 <p id="articleId" hidden>

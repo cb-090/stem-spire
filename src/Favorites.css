@@ -1,37 +1,37 @@
-.favorites-page {
+/* .favorites-page {
     display: flex;
     flex-direction: column;
     padding: 1em;
     box-sizing: border-box;
-  }
+  } */
   
-  .favorites-header {
+  /* .favorites-header {
     background-color: #cfeeff;
     text-align: center;
     font-size: 1.5em;
     border-radius: 10px;
     margin-bottom: 1em;
     margin-top: .3em;
-  }
+  } */
   
-  .scroll-container {
+  /* .scroll-container {
     flex: 1;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 1.5em;
-  }
+  } */
   
-  .article-box {
-    background-color: #dcf1fd;
+  /* .article-box {
+    background-color: white;
     padding: 1.25em;
     border-radius: 8px;
     box-shadow: 8px 8px 3px rgba(0,0,0,0.1);
     border: 1px solid black;
     list-style-type: none;
-  }
+  } */
   
-  .article-header {
+  /* .article-header {
     display: flex;
     justify-content: space-between;
     font-weight: bold;
@@ -52,6 +52,6 @@
     padding: 0.5em;
     border-radius: 8px;
     margin: 0;
-  }
+  } */
   
   

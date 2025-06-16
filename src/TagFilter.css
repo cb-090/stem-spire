@@ -1,20 +1,26 @@
+/* tags under search bar */
+
 .tag-filter {
     display: flex;
     justify-content: center; 
     align-items: center; 
     gap: 0.5em;
     flex-wrap: wrap;
-    margin-top: 15px;
+    margin-top: 12px;
+    margin-bottom: 0;
+    padding: 0;
   }
 
 .tag-button {
-    font-size: 0.80em;
+    font-size: 0.85em;
     border-radius: 20px;
-    padding: 3px 7px;
+    padding: 4px 12px;
 }
   
-  .tag-button.selected {
-    background-color: #005f73;
-    color: white;
-    border: 1px solid #005f73;
-  }
+.tag-button.selected {
+  /* background-color: #80c2d9; */
+  background-color: #eea8c3;
+  color: black;
+  /* border: 1px solid #80c2d9; */
+  border: 1px solid #eea8c3;
+}

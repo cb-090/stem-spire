@@ -1,40 +1,37 @@
-.about-page {
-    padding: 1em;
-    padding-bottom: 2em;
-    text-align: center;
+  .mission-blurb {
+    margin: 2em 20vw;
+    font-size: 1.1em;
   }
-  
+
   .section-title {
-    background-color: #cfeeff;;
-    display: inline-block;
+    width: 20%;
+    align-self: center;
+    font-family: BreeSerif, serif;
+    font-size: 1.5em;
     padding: 0.75em 12em;
     border-radius: 10px;
-    font-size: 1.5em;
+    margin-top: 0.5em;
     margin-bottom: 0;
-  
-  }
-  
-  .mission-blurb {
-    margin-bottom: 2em;
-    margin-right: 20vw;
-    margin-left: 20vw;
-    font-size: 1.1em;
+    /* background-color: #fcc2d9; */
+    background: linear-gradient(to right, #b0d0f0, #ffc8dd, #98d5e9);
+    border: 1px solid white;
   }
   
   .team-grid {
     display: flex;
     justify-content: center;
-    gap: 1em;
+    gap: 1.5em;
     flex-wrap: wrap;
   }
   
   .team-member {
-    max-width: 200px;
+    max-width: 210px;
     border: 1px solid black;
+    background-color: #d3e3f5;
     border-radius: 10px;
     margin-top: 2em;
-    padding-left: 1em;
-    padding-right: 1em;
+    padding-left: 1.2em;
+    padding-right: 1.2em;
   }
   
   .team-member img {

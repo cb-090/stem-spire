@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { supabase } from "./supabase"; // update this path
 import "./LogIn.css";
+import "./App.css";
 
 export default function LogIn({
   changePage,
@@ -20,7 +21,9 @@ export default function LogIn({
     field_of_interest: "",
     resource_interests: [],
   });
-  
+
+  const [surveyWarning, setSurveyWarning] = useState("");
+
   const surveyQuestions = [
     {
       id: "education_level",
@@ -98,9 +101,8 @@ export default function LogIn({
 
     if (error) {
       console.log("Error signing in", error);
-      setIsNewUser(true);
+      setWarning("Invalid email or password.");
       setIsSignedIn(false);
-      setWarning("Oops! You're a new user, please sign up!");
     } else {
       setUser(data.user);
       setIsSignedIn(true);
@@ -111,6 +113,7 @@ export default function LogIn({
   
   function createAccount(e) {
     e.preventDefault();
+    setWarning("");
     setIsNewUser(true);
   }
 
@@ -183,40 +186,53 @@ export default function LogIn({
 }
 
   return (
-    <div className="login-page">
-      <div className="login-header"></div>
-      <div>
-        {!isSignedIn && !isNewUser && (
+  <div className="login-page">
+    <div>
+      {!isSignedIn && !isNewUser && (
+        <div className="form-box">
+          {warning && <p id="warning">{warning}</p>}
           <form>
             <h2>Log In</h2>
-            <label>Email: </label>
-            <input id="email" placeholder="Email"></input>
-            <label>Password: </label>
-            <input id="password" placeholder="*************"></input>
-            <button onClick={signIn}>Sign In</button>
+            <label>Email</label>
+            <input id="email" placeholder="Email" />
+            <label>Password</label>
+            <input id="password" type="password" placeholder="*************" />
+            <button onClick={signIn}>Log In</button>
             <p>If you don't have an account,</p>
-            <button onClick={createAccount}>Sign Up</button>
+            <button type="button" onClick={createAccount}>Sign Up</button>
           </form>
-        )}
-        {!isSignedIn && isNewUser && warning && <p id="warning">{warning}</p>}
-        {!isSignedIn && isNewUser && (
+        </div>
+      )}
+
+      {!isSignedIn && isNewUser && (
+        <div className="form-box">
+          {warning && <p id="warning">{warning}</p>}
           <form>
-            <p>Sign Up!</p>
-            <label>Name: </label>
-            <input id="name" placeholder="First & Last Name"></input>
-            <label>Email: </label>
-            <input id="email" placeholder="Email"></input>
-            <label>Password: </label>
-            <input id="password" placeholder="*************"></input>
+            <h2>Sign Up</h2>
+            <label>Name</label>
+            <input id="name" placeholder="First & Last Name" />
+            <label>Email</label>
+            <input id="email" placeholder="Email" />
+            <label>Password</label>
+            <input id="password" type="password" placeholder="*************" />
             <button onClick={signUp}>Sign Up</button>
+            <p>Already have an account?</p>
+            <button type="button" onClick={() => {
+                setWarning("");
+                setIsNewUser(false);
+            }}>Log In</button>
           </form>
-        )}
-        {/* this should just be the first time you sign up, otherwise it takes you to the home page */}
-        {isSignedIn && isNewUser && (
+        </div>
+      )}
+    
+      {isSignedIn && isNewUser && (
+        <div className="form-box">
           <form>
-            <p>{surveyQuestions[surveyStep].question}</p>
+            {surveyWarning && <p id="warning">{surveyWarning}</p>}
+            <h2 className = "questionnaire" >Questionnaire</h2>
+            <p className = "question">{surveyQuestions[surveyStep].question}</p>
             {surveyQuestions[surveyStep].options.map((option, idx) => (
-              <div key={idx}>
+              <div className = "option-container" key={idx}>
                 <label>
                   <input
                     type={surveyQuestions[surveyStep].multi ? "checkbox" : "radio"}
@@ -236,31 +252,47 @@ export default function LogIn({
               </div>
             ))}
 
-            <div>
+            <div className="button-row">
               {surveyStep > 0 && (
-                <button
-                  type="button"
-                  onClick={() => setSurveyStep((prev) => prev - 1)}
-                >
-                  Back
-                </button>
+                <button type="button" onClick={() => setSurveyStep((prev) => prev - 1)}>Back</button>
               )}
               {surveyStep < surveyQuestions.length - 1 ? (
                 <button
-                  type="button"
-                  onClick={() => setSurveyStep((prev) => prev + 1)}
-                >
-                  Next
+                    type="button"
+                    onClick={() => {
+                    const current = surveyQuestions[surveyStep];
+                    const answer = surveyData[current.id];
+                    const isAnswered = current.multi ? answer.length > 0 : !!answer;
+                    if (!isAnswered) {
+                        setSurveyWarning("Please select an option before continuing.");
+                    } else {
+                        setSurveyWarning("");
+                        setSurveyStep((prev) => prev + 1);
+                    }
+                    }}
+                > Next
                 </button>
-              ) : (
-                <button type="button" onClick={submitSurvey}>
-                  Submit
+                ) : (
+                <button
+                    type="button"
+                    onClick={() => {
+                    const current = surveyQuestions[surveyStep];
+                    const answer = surveyData[current.id];
+                    const isAnswered = current.multi ? answer.length > 0 : !!answer;
+                    if (!isAnswered) {
+                        setSurveyWarning("Please select an option before submitting.");
+                    } else {
+                        setSurveyWarning("");
+                        submitSurvey();
+                    }
+                    }}
+                > Submit
                 </button>
-              )}
+                )}
             </div>
           </form>
-        )}
-      </div>
+        </div>
+      )}
     </div>
-  );
-}
+  </div>
+)}
