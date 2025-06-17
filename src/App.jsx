@@ -74,8 +74,9 @@ function App() {
           setIsNewUser(false);
           getUserName(currentUser);
           showFavorites();
+          setQuery(null);
         }
-        getArticles()
+        getArticles(); 
       }
     );
 
@@ -139,6 +140,7 @@ function App() {
     const { error } = await supabase.auth.signOut();
     setIsSignedIn(false);
     setSelectedTags([]);
+    setQuery(null);
     changePage("browse");
     if (error) console.error("Error signing out", error);
   }
@@ -204,7 +206,7 @@ function App() {
     console.log("Favorites:", favoriteArticles); 
   }
   
-  async function getArticles() {
+  async function getArticles(optionalQuery = query) {
       let { data: filtered, error } = await supabase
       .from("articles")
       .select(`
@@ -220,11 +222,12 @@ function App() {
       return;
     }
   
-    if (query) {
-      const q = query.toLowerCase();
+    if (optionalQuery) {
+      const q = optionalQuery.toLowerCase();
       filtered = filtered.filter(article =>
         article.title.toLowerCase().includes(q) ||
-        article.content.toLowerCase().includes(q)
+        article.content.toLowerCase().includes(q) ||
+        article.author?.toLowerCase().includes(q)
       );
     }
     if (selectedTags.length > 0) {
@@ -243,14 +246,14 @@ function App() {
   }
 
   useEffect( () => {
-    async function search(query) {
-    const response = await getEmbedding(query)
-    console.log(`Query: ${query}`)
-    console.log(`Response: ${response}`)
-  }
-  if (query) {
-    search(query)
-  }
+//     async function search(query) {
+//     const response = await getEmbedding(query)
+//     console.log(`Query: ${query}`)
+//     console.log(`Response: ${response}`)
+//   }
+// //   if (query) {
+//     search(query)
+//   }
 }, [query])
    
   return (
