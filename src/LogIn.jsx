@@ -144,6 +144,7 @@ export default function LogIn({
     if (error) {
       console.error("Error updating profile:", error);
     } else {
+        setIsNewUser(false);
     
     const { data: profile, error: profileError } = await supabase
       .from("user profile")
