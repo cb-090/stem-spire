@@ -40,5 +40,7 @@
   }
 
   .search-button:hover {
-    background-color: #7eb8cc;
+    /* background-color: #7eb8cc; */
+    background-color: #98d5e9;
+    border: 1.5px solid black;
   }

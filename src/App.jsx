@@ -20,7 +20,7 @@ function App() {
   const [articles, setArticles] = useState([]);
   const [recommendations,setRecommendations] = useState([])
   const [userFavorites, setUserFavorites] = useState([]);
-  const availableTags = ["Highschool","College", "Internship", "study tips", "summer program", "career development"];
+  const availableTags = ["Highschool","College", "Summer programs and internships", "Scholarships and financial aid", "Career exploration/development", "Grad", "Post-Grad", "Mentorship or Networking Opportunities", "Academic tips, resources, and study strategies"];
   const [selectedTags, setSelectedTags] = useState([]);
   const [click, setClick] = useState()
 

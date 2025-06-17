@@ -117,4 +117,9 @@ form h2 {
     margin-top: 0.5em;
     color: black;
   }
+
+  input[type="checkbox"],
+  input[type="radio"] {
+    accent-color: #c61357; 
+  }
   

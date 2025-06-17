@@ -18,7 +18,7 @@ export default function LogIn({
   const [surveyStep, setSurveyStep] = useState(0);
   const [surveyData, setSurveyData] = useState({
     education_level: "",
-    field_of_interest: "",
+    field_of_interest: [],
     resource_interests: [],
   });
 
@@ -28,7 +28,7 @@ export default function LogIn({
     {
       id: "education_level",
       question: "What is your current level of education?",
-      options: ["High School", "University", "Graduate", "Post-graduate"],
+      options: ["High School", "University", "Grad", "Post-grad"],
       multi: false,
     },
     {
@@ -38,7 +38,7 @@ export default function LogIn({
         "Engineering", "Computer Science", "Biology", "Chemistry", "Physics",
         "Medicine", "Environmental Science", "Statistics", "Data Science", "Applied Math"
       ],
-      multi: false,
+      multi: true,
     },
     {
       id: "resource_interests",
@@ -118,14 +118,19 @@ export default function LogIn({
   }
 
   function handleSurveyChange(id, value) {
+    const currentQuestion = surveyQuestions.find(q => q.id === id);
+    const isMulti = currentQuestion?.multi;
+
     setSurveyData((prev) => {
-      if (id === "resource_interests") {
-        const updated = prev.resource_interests.includes(value)
-          ? prev.resource_interests.filter((v) => v !== value)
-          : [...prev.resource_interests, value];
-        return { ...prev, [id]: updated };
+      if (isMulti) {
+        const alreadySelected = prev[id]?.includes(value);
+        const updated = alreadySelected
+          ? prev[id].filter((v) => v !== value)
+          : [...(prev[id] || []), value];
+          return { ...prev, [id]: updated };
+      } else {
+        return { ...prev, [id]: value };
       }
-      return { ...prev, [id]: value };
     });
   }
 
@@ -157,7 +162,7 @@ export default function LogIn({
   
     const interestTags = [
       ...(surveyData.resource_interests || []),
-      ...(surveyData.field_of_interest ? [surveyData.field_of_interest] : []),
+      ...((surveyData.field_of_interest || [])),
       ...(surveyData.education_level ? [surveyData.education_level] : [])
     ].map(tag => tag.toLowerCase());
   
