@@ -28,7 +28,7 @@ export default function LogIn({
     {
       id: "education_level",
       question: "What is your current level of education?",
-      options: ["High School", "University", "Grad", "Post-grad"],
+      options: ["Highschool", "University", "Grad", "Post-grad"],
       multi: false,
     },
     {
@@ -215,10 +215,10 @@ export default function LogIn({
           {warning && <p id="warning">{warning}</p>}
           <form>
             <h2>Sign Up</h2>
-            <label>Name</label>
-            <input id="name" placeholder="First & Last Name" />
+            <label>Full Name</label>
+            <input id="name" placeholder="Alex Johnson" />
             <label>Email</label>
-            <input id="email" placeholder="Email" />
+            <input id="email" placeholder="abc@gmail.com" />
             <label>Password</label>
             <input id="password" type="password" placeholder="*************" />
             <button onClick={signUp}>Sign Up</button>

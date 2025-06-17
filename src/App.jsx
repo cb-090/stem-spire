@@ -138,6 +138,7 @@ function App() {
   async function signOut() {
     const { error } = await supabase.auth.signOut();
     setIsSignedIn(false);
+    setSelectedTags([]);
     changePage("browse");
     if (error) console.error("Error signing out", error);
   }
