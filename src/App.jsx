@@ -306,7 +306,19 @@ function App() {
             
           />
 
-          {articles && <Results articles={articles} favorites={userFavorites} user={user} favorite={favorite} unfavorite={unfavorite} click={click} setClick={setClick}/>}
+          {articles.length > 0 ? (
+            <Results
+              articles={articles}
+              favorites={userFavorites}
+              user={user}
+              favorite={favorite}
+              unfavorite={unfavorite}
+              click={click}
+              setClick={setClick}
+            />
+          ) : (
+            <p className="no-results">No results available.</p>
+          )}
         </div>
       )}
 
