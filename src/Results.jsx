@@ -1,6 +1,5 @@
 import { useState } from "react";
 import "./App.css";
-import "./Results.css";
 
 export default function Results({
   articles,

@@ -1,6 +1,5 @@
 import { useState } from "react";
-import "./App.css";
-import './Favorites.css'; 
+import "./App.css"; 
 
 export default function Favorites({userName, favorites, unfavorite}) {
   const [clickedArticles, setClickedArticles] = useState(new Set());
