@@ -225,8 +225,8 @@ function App() {
     if (optionalQuery) {
       const q = optionalQuery.toLowerCase();
       filtered = filtered.filter(article =>
-        article.title.toLowerCase().includes(q) ||
-        article.content.toLowerCase().includes(q) ||
+        article.title?.toLowerCase().includes(q) ||
+        article.content?.toLowerCase().includes(q) ||
         article.author?.toLowerCase().includes(q)
       );
     }
@@ -246,14 +246,14 @@ function App() {
   }
 
   useEffect( () => {
-//     async function search(query) {
-//     const response = await getEmbedding(query)
-//     console.log(`Query: ${query}`)
-//     console.log(`Response: ${response}`)
-//   }
-// //   if (query) {
-//     search(query)
-//   }
+    async function search(query) {
+    const response = await getEmbedding(query)
+    console.log(`Query: ${query}`)
+    console.log(`Response: ${response}`)
+  }
+  if (query) {
+    search(query)
+  }
 }, [query])
    
   return (
@@ -296,8 +296,7 @@ function App() {
             <h2>Browse</h2>
             {user && <p>Hi {userName}!</p>}
           </div>
-          <Recommended user={user}favorites={userFavorites}  favorite={favorite} unfavorite={unfavorite} userName={userName} articles = {articles}recommendations={recommendations} setRecommendations={setRecommendations} click={click}/>
-
+          <Recommended user={user} favorites={userFavorites}  favorite={favorite} unfavorite={unfavorite} userName={userName} articles = {articles}recommendations={recommendations} setRecommendations={setRecommendations} click={click}/>
           <SearchBar action = {setQuery} />
           <TagFilter
             availableTags={availableTags}
