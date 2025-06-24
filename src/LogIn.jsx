@@ -28,15 +28,15 @@ export default function LogIn({
     {
       id: "education_level",
       question: "What is your current level of education?",
-      options: ["Highschool", "University", "Grad", "Post-grad"],
+      options: ["High School","College", "Grad School", "Post Grad"],
       multi: false,
     },
     {
       id: "field_of_interest",
       question: "What is your current field of study/major or career interest?",
       options: [
-        "Engineering", "Computer Science", "Biology", "Chemistry", "Physics",
-        "Medicine", "Environmental Science", "Statistics", "Data Science", "Applied Math"
+        "Computer science", "Engineering", "Biological and life sciences", "Physical and earth sciences", "Enviormental science", 
+        "Health and medicine", "Data science", "Mathematics"
       ],
       multi: true,
     },
