@@ -14,8 +14,7 @@ export default function Favorites({userName, favorites, unfavorite}) {
   return (
     <div className="page">
       <div className="page-header">
-        <h2>Favorites</h2>
-        <p>Hi {userName}!</p>
+        <h2>{userName}'s Favorited Articles</h2>
       </div>
       <ul className="results-list">
       {favorites.map((article) => (

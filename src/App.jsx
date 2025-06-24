@@ -295,8 +295,8 @@ function App() {
       {isBrowsing && (
         <div className="page">
           <div className="page-header">
-            <h2>Browse</h2>
-            {user && <p>Hi {userName}!</p>}
+            <h2>Browse STEM-Based Resources</h2>
+            <p>♡ Built by girls in STEM, for girls in STEM ♡</p>
           </div>
           <Recommended user={user}favorites={userFavorites}  favorite={favorite} unfavorite={unfavorite} userName={userName} articles = {articles}recommendations={recommendations} setRecommendations={setRecommendations} click={click}/>
 
