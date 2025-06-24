@@ -26,9 +26,9 @@ export default function TagFilter({ availableTags, selectedTags, onChange }) {
       ))}
 
       <button onClick={clearTags} className="clear-button">
-        Clear Tags
+        Reset Search
       </button>
-      
+
     </div>
   );
 }

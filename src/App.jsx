@@ -38,6 +38,16 @@ function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [warning, setWarning] = useState("");
 
+  function handleSearch(query) {
+    setQuery(query);
+    setSelectedTags([]); 
+  }
+
+  function handleTagChange(tags) {
+    setSelectedTags(tags); 
+    setQuery(null);        
+  }
+
   const changePage = (page) => {
     setIsLogin(false);
     setIsBrowsing(false);
@@ -301,11 +311,11 @@ function App() {
           </div>
           <Recommended user={user}favorites={userFavorites}  favorite={favorite} unfavorite={unfavorite} userName={userName} articles = {articles}recommendations={recommendations} setRecommendations={setRecommendations} click={click}/>
 
-          <SearchBar action = {setQuery} />
+          <SearchBar action = {handleSearch} />
           <TagFilter
             availableTags={availableTags}
             selectedTags={selectedTags}
-            onChange={setSelectedTags}
+            onChange={handleTagChange}
             
           />
 
