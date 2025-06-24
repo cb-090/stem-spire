@@ -1,10 +1,10 @@
 /* tags under search bar */
 .tag-filter {
     display: flex;
-    justify-content: center; 
-    align-items: center; 
-    gap: 0.5em;
+    justify-content: center;
+    align-items: center;
     flex-wrap: wrap;
+    gap: 0.5em;
     margin: 12px 10vw 0 10vw;
     padding: 0;
   }
@@ -25,3 +25,19 @@ div.tag-filter button.tag-button.selected {
 .tag-button:hover {
     background-color: #eea8c3;
 }
+
+.clear-button {
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 0.85em;
+    background-color: #98d5e9;
+    border: 1px solid black;
+    color: black;
+    cursor: pointer;
+    margin-left: 0.75em;
+  }
+  
+  .clear-button:hover {
+    background-color: white;
+    border: 1px solid black;
+  }

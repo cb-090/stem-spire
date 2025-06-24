@@ -46,6 +46,7 @@ function App() {
 
     if (page == "login") {
       setIsLogin(true);
+      setSelectedTags([]);
     } else if (page == "browse") {
       setIsBrowsing(true);
     } else if (page == "favorites") {
