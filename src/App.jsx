@@ -20,7 +20,9 @@ function App() {
   const [articles, setArticles] = useState([]);
   const [recommendations,setRecommendations] = useState([])
   const [userFavorites, setUserFavorites] = useState([]);
-  const availableTags = ["Highschool","College", "Internship", "study tips", "summer program", "career development"];
+  const availableTags = ["High School","College", "Grad School", "Post Grad", 
+  "Computer science", "Engineering", "Biological and life sciences", "Physical and earth sciences", "Enviormental science", "Health and medicine", "Data science", "Mathematics", 
+  "Summer programs and internships", "Scholarships and financial aid", "Career exploration/development", "Mentorship or networking opportunities","Skill building workshops", "Academic tips, resources, and study strategies", "Research opportunities"];
   const [selectedTags, setSelectedTags] = useState([]);
   const [click, setClick] = useState()
 
@@ -36,6 +38,16 @@ function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [warning, setWarning] = useState("");
 
+  function handleSearch(query) {
+    setQuery(query);
+    setSelectedTags([]); 
+  }
+
+  function handleTagChange(tags) {
+    setSelectedTags(tags); 
+    setQuery(null);        
+  }
+
   const changePage = (page) => {
     setIsLogin(false);
     setIsBrowsing(false);
@@ -44,6 +56,7 @@ function App() {
 
     if (page == "login") {
       setIsLogin(true);
+      setSelectedTags([]);
     } else if (page == "browse") {
       setIsBrowsing(true);
     } else if (page == "favorites") {
@@ -74,8 +87,9 @@ function App() {
           setIsNewUser(false);
           getUserName(currentUser);
           showFavorites();
+          setQuery(null);
         }
-        getArticles()
+        getArticles(); 
       }
     );
 
@@ -138,6 +152,8 @@ function App() {
   async function signOut() {
     const { error } = await supabase.auth.signOut();
     setIsSignedIn(false);
+    setSelectedTags([]);
+    setQuery(null);
     changePage("browse");
     if (error) console.error("Error signing out", error);
   }
@@ -203,7 +219,7 @@ function App() {
     console.log("Favorites:", favoriteArticles); 
   }
   
-  async function getArticles() {
+  async function getArticles(optionalQuery = query) {
       let { data: filtered, error } = await supabase
       .from("articles")
       .select(`
@@ -219,11 +235,12 @@ function App() {
       return;
     }
   
-    if (query) {
-      const q = query.toLowerCase();
+    if (optionalQuery) {
+      const q = optionalQuery.toLowerCase();
       filtered = filtered.filter(article =>
         article.title.toLowerCase().includes(q) ||
-        article.content.toLowerCase().includes(q)
+        article.content.toLowerCase().includes(q) ||
+        article.author?.toLowerCase().includes(q)
       );
     }
     if (selectedTags.length > 0) {
@@ -242,14 +259,14 @@ function App() {
   }
 
   useEffect( () => {
-    async function search(query) {
-    const response = await getEmbedding(query)
-    console.log(`Query: ${query}`)
-    console.log(`Response: ${response}`)
-  }
-  if (query) {
-    search(query)
-  }
+//     async function search(query) {
+//     const response = await getEmbedding(query)
+//     console.log(`Query: ${query}`)
+//     console.log(`Response: ${response}`)
+//   }
+// //   if (query) {
+//     search(query)
+//   }
 }, [query])
    
   return (
@@ -289,20 +306,32 @@ function App() {
       {isBrowsing && (
         <div className="page">
           <div className="page-header">
-            <h2>Browse</h2>
-            {user && <p>Hi {userName}!</p>}
+            <h2>Browse STEM-Based Resources</h2>
+            <p>♡ Built by girls in STEM, for girls in STEM ♡</p>
           </div>
           <Recommended user={user}favorites={userFavorites}  favorite={favorite} unfavorite={unfavorite} userName={userName} articles = {articles}recommendations={recommendations} setRecommendations={setRecommendations} click={click}/>
 
-          <SearchBar action = {setQuery} />
+          <SearchBar action = {handleSearch} />
           <TagFilter
             availableTags={availableTags}
             selectedTags={selectedTags}
-            onChange={setSelectedTags}
+            onChange={handleTagChange}
             
           />
 
-          {articles && <Results articles={articles} favorites={userFavorites} user={user} favorite={favorite} unfavorite={unfavorite} click={click} setClick={setClick}/>}
+          {articles.length > 0 ? (
+            <Results
+              articles={articles}
+              favorites={userFavorites}
+              user={user}
+              favorite={favorite}
+              unfavorite={unfavorite}
+              click={click}
+              setClick={setClick}
+            />
+          ) : (
+            <p className="no-results">No results available.</p>
+          )}
         </div>
       )}
 

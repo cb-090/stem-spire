@@ -18,7 +18,7 @@ export default function LogIn({
   const [surveyStep, setSurveyStep] = useState(0);
   const [surveyData, setSurveyData] = useState({
     education_level: "",
-    field_of_interest: "",
+    field_of_interest: [],
     resource_interests: [],
   });
 
@@ -28,17 +28,17 @@ export default function LogIn({
     {
       id: "education_level",
       question: "What is your current level of education?",
-      options: ["High School", "University", "Graduate", "Post-graduate"],
+      options: ["High School","College", "Grad School", "Post Grad"],
       multi: false,
     },
     {
       id: "field_of_interest",
       question: "What is your current field of study/major or career interest?",
       options: [
-        "Engineering", "Computer Science", "Biology", "Chemistry", "Physics",
-        "Medicine", "Environmental Science", "Statistics", "Data Science", "Applied Math"
+        "Computer science", "Engineering", "Biological and life sciences", "Physical and earth sciences", "Enviormental science", 
+        "Health and medicine", "Data science", "Mathematics"
       ],
-      multi: false,
+      multi: true,
     },
     {
       id: "resource_interests",
@@ -118,14 +118,19 @@ export default function LogIn({
   }
 
   function handleSurveyChange(id, value) {
+    const currentQuestion = surveyQuestions.find(q => q.id === id);
+    const isMulti = currentQuestion?.multi;
+
     setSurveyData((prev) => {
-      if (id === "resource_interests") {
-        const updated = prev.resource_interests.includes(value)
-          ? prev.resource_interests.filter((v) => v !== value)
-          : [...prev.resource_interests, value];
-        return { ...prev, [id]: updated };
+      if (isMulti) {
+        const alreadySelected = prev[id]?.includes(value);
+        const updated = alreadySelected
+          ? prev[id].filter((v) => v !== value)
+          : [...(prev[id] || []), value];
+          return { ...prev, [id]: updated };
+      } else {
+        return { ...prev, [id]: value };
       }
-      return { ...prev, [id]: value };
     });
   }
 
@@ -139,6 +144,7 @@ export default function LogIn({
     if (error) {
       console.error("Error updating profile:", error);
     } else {
+        setIsNewUser(false);
     
     const { data: profile, error: profileError } = await supabase
       .from("user profile")
@@ -157,7 +163,7 @@ export default function LogIn({
   
     const interestTags = [
       ...(surveyData.resource_interests || []),
-      ...(surveyData.field_of_interest ? [surveyData.field_of_interest] : []),
+      ...((surveyData.field_of_interest || [])),
       ...(surveyData.education_level ? [surveyData.education_level] : [])
     ].map(tag => tag.toLowerCase());
   
@@ -209,10 +215,10 @@ export default function LogIn({
           {warning && <p id="warning">{warning}</p>}
           <form>
             <h2>Sign Up</h2>
-            <label>Name</label>
-            <input id="name" placeholder="First & Last Name" />
+            <label>Full Name</label>
+            <input id="name" placeholder="Alex Johnson" />
             <label>Email</label>
-            <input id="email" placeholder="Email" />
+            <input id="email" placeholder="abc@gmail.com" />
             <label>Password</label>
             <input id="password" type="password" placeholder="*************" />
             <button onClick={signUp}>Sign Up</button>

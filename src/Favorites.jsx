@@ -1,6 +1,5 @@
 import { useState } from "react";
-import "./App.css";
-import './Favorites.css'; 
+import "./App.css"; 
 
 export default function Favorites({userName, favorites, unfavorite}) {
   const [clickedArticles, setClickedArticles] = useState(new Set());
@@ -15,8 +14,7 @@ export default function Favorites({userName, favorites, unfavorite}) {
   return (
     <div className="page">
       <div className="page-header">
-        <h2>Favorites</h2>
-        <p>Hi {userName}!</p>
+        <h2>{userName}'s Favorited Articles</h2>
       </div>
       <ul className="results-list">
       {favorites.map((article) => (
@@ -37,7 +35,7 @@ export default function Favorites({userName, favorites, unfavorite}) {
             </span>
               <div className="right-group">
                 <span>{article.articles.author}</span> 
-                <button onClick={async () => unfavorite(article.article_id)}>⭐</button>
+                <button onClick={async () => unfavorite(article.article_id)}>🩷</button>
                   </div>
             </div>
             <p className="article-text">{article.articles.content}</p>

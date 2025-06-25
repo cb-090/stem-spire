@@ -9,6 +9,10 @@ export default function TagFilter({ availableTags, selectedTags, onChange }) {
     }
   }
 
+  function clearTags() {
+    onChange([]); // Clear all selected tags
+  }
+
   return (
     <div className="tag-filter">
       {availableTags.map((tag) => (
@@ -20,6 +24,11 @@ export default function TagFilter({ availableTags, selectedTags, onChange }) {
           {tag}
         </button>
       ))}
+
+      <button onClick={clearTags} className="clear-button">
+        Reset Search
+      </button>
+
     </div>
   );
 }

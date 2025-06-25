@@ -1,6 +1,5 @@
 import { useState } from "react";
 import "./App.css";
-import "./Results.css";
 
 export default function Results({
   articles,
@@ -54,8 +53,8 @@ export default function Results({
                     {favorites.find(
                       (favorite) => favorite.article_id == article.id
                     )
-                      ? "⭐"
-                      : "☆"}
+                      ? "🩷"
+                      : "♡"}
                   </button>
                 )}
               </div>

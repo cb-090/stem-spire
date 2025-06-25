@@ -6,6 +6,7 @@ export default function About() {
     <div className="page">
       <div className='page-header' >
         <h2>About STEM-Spire</h2>
+        <p>♡ Built by girls in STEM, for girls in STEM ♡</p>
       </div>
       <p className="mission-blurb"> The underrepresentation of women and gender-nonconforming individuals in STEM fields 
       remains a significant barrier to inclusivity, often due to a lack of accessible resources, mentorship, and 
