@@ -5,7 +5,7 @@ export default function Favorites({userName, favorites, unfavorite}) {
     <div className="favorites-page">
       <div className="favorites-header">
         <h2>Favorites</h2>
-        <p>Hi! {userName}</p>
+        <p>Hi {userName}!</p>
       </div>
       <div className="scroll-container">
       {favorites.map((article) => (
